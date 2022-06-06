@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style.css"> 
+    <title>joeDraw App</title>
+
+</head>
+<body>
+    <div class="login">
+        <p class="title">Welcome to joeDraw app !</p>
+        <form action="" onsubmit="handleSubmit(event)">
+            <p>Username : </p>
+            <input type="text"><br><br>
+            <button type="submit">Submit</button>
+            
+        </form>
+    </div>
+    <div class="container hide">
+        <div class="left">
+            <p>Current users : </p>
+            <ul class="listOfUsers"></ul>
+        </div>
+        <div class="right">
+            <canvas></canvas>
+            <div class="bottom">
+              
+                <div class="basic-colors">
+                    <div class="color" style="background : black;" onclick="drawingColor('black',this)"></div>
+                    <div class="color" style="background : gray;" onclick="drawingColor('gray',this)"></div>
+                    <div class="color" style="background : white;" onclick="drawingColor('white',this)"></div>
+                </div>
+
+                <div class="more-colors">
+                    <div class="color" style="background : rgb(241, 36, 36);" onclick="drawingColor('rgb(241, 36, 36)',this)"></div>
+                    <div class="color" style="background : orange;" onclick="drawingColor('orange',this)"></div>
+                    <div class="color" style="background : yellow;" onclick="drawingColor('yellow',this)"></div>
+                    <div class="color" style="background : rgb(50, 230, 50);" onclick="drawingColor('rgb(50, 230, 50)',this)"></div>
+                    <div class="color" style="background : rgb(0, 106, 255);" onclick="drawingColor('rgb(0, 106, 255)',this)"></div>
+                    <div class="color" style="background : cyan;" onclick="drawingColor('cyan',this)" ></div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/app.js"></script>
+
+</body>
+</html>
