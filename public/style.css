@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+*{
+    margin : 0;
+    padding : 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+body{
+    background: #ffe8e8;
+    overflow: hidden;
+}
+.left{
+    height : 100vh;
+    width : 200px;
+    background  : #455054;
+    color : #ffe8e8;
+    padding: 1em 0;
+    overflow-y: hidden;
+}
+.container{
+    width : 100%;
+    display: flex;
+}
+.right{
+    width : 100%;
+    display: grid;
+
+}
+canvas{
+    border : 7px solid black;
+    margin: 0 auto;
+    margin-top : 2em;
+    background: white;
+}
+.bottom{
+    background: #455054;
+    border : 2px solid #308695;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+
+}
+
+.color {
+    width : 50px;
+    height : 50px;
+    border-radius: 50%;
+    border : 2px solid white;
+    margin-inline: .6em;
+    cursor : pointer;
+}
+.basic-colors {
+    display: flex;
+    align-items: center;
+    margin-right : 3em;
+}
+.more-colors{
+    display: flex;
+    align-items: center;
+}
+
+.active{
+    border-radius: 1px;
+}
+.hide{
+    display: none !important;
+}
+
+.login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+
+}
+form > *{
+    display: inline;
+    font-size: 2em;
+}
+
+
+input[type="text"]{
+    outline : none;
+    border : none;
+    padding : .5em;
+    color : white;
+    text-align: center;
+    border-radius: 4px;
+    background: #222;
+}
+button{
+    width : 100%;
+    outline: none;
+    border: 1px solid white;
+    background : #222;
+    color : white;
+    padding : .5em 1.2em;
+    cursor: pointer;
+}
+
+.title{
+    font-size: 4em;
+    margin-bottom: 5em;
+}
+
+.left p{
+    margin-bottom: .5em;
+}
+li{
+    padding : .5em 1em;
+    list-style: none;
+    font-weight: bolder;
+    margin-block : 10px;
+}
+
+li:nth-child(odd) {
+    background : #308695;
+    color : #ffe8e8;
+  }
+  
+li:nth-child(even) {
+    background : #e69d45;
+    color : #455054;
+  }
