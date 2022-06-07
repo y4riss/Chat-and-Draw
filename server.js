@@ -19,9 +19,9 @@ app.get('/',(req,res)=>{
 
 
 let userList = [] //list of current users
-let metaData = [] // idea : when a new user comes , render what has been drew before 
+let lines = [] // each element is an array that has the line that has been drawing up until now
+let lineCoords = [] // holds the info about a line in the board ( x , y , width , color)
 
-//this fires when a connection is established ( new client connected)
 io.on('connection',socket=>{
     //update user list whenever a client reaches
     io.emit('renderUser',userList)
@@ -35,7 +35,8 @@ io.on('connection',socket=>{
             username : user
         })
         io.emit('renderUser',userList)
-        console.log(userList)
+        socket.emit('renderPreviousDrawings',lines) // when a user get added , the server sends to that user the informations about the
+        // current board ( the lines that had been drew up until now , and they get rendered)
 
     })
 
@@ -43,18 +44,30 @@ io.on('connection',socket=>{
     // mousedown and mousemove are sent by the client who is currently drawing , and the server sends the data (coords , color , linewidth)
     // to all the clients except the one drawing because he already sees what he's drawing.
     socket.on('mousedown',data=>{
+        lineCoords.push(data) // this represents the first element of lineCoords array , which is the coords of where the line begins
         socket.broadcast.emit('mousedown',data)
     })
     socket.on('mousemove',data=>{
+        lineCoords.push(data) // and these are the rest of the coords along with the color and width
         socket.broadcast.emit('mousemove',data)
+    })
+
+    socket.on('mouseup',()=>{
+        //when the user finishes drawing , this function fires , it addes the line to the lines array , and reset the line array
+        lines.push(lineCoords)
+        lineCoords = []
     })
     
     // when a user disconnect , it gets removed from the userList
     // and then we reRender the userList with the new UserList
     socket.on('disconnect',()=>{
         userList = userList.filter(user=> user.id != socket.id)
-        io.emit('renderUser',userList)
-        console.log(userList)
+        if(userList.length > 0)    io.emit('renderUser',userList)
+        else{
+            lineCoords = []
+            lines = []
+        }
+
 
     })
 

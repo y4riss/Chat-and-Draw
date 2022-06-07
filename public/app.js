@@ -112,7 +112,18 @@ socket.on('mousemove',data=>{
     ctx.stroke()
     }
 })
-    
+
+socket.on('renderPreviousDrawings',lines =>{
+    lines.map(lineCoords =>{
+            for(let i = 0 ; i < lineCoords.length ; i++){
+            if(i==0)    startDrawing(lineCoords[i].x,lineCoords[i].y,lineCoords[i].l,lineCoords[i].c)
+            else{
+                ctx.lineTo(lineCoords[i].x,lineCoords[i].y)
+                ctx.stroke()
+            }
+            }
+    })
+})
 /* ______________________________________________________END OF SOCKETS______________________________________________*/
 
 
@@ -137,4 +148,5 @@ if(drawing) {
 })
 canvas.addEventListener("mouseup",()=>{
     drawing = false
+    socket.emit('mouseup')
 })
