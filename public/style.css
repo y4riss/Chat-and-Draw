@@ -9,13 +9,8 @@ body{
     background: #151515;
     overflow: hidden;
 }
-div .eraserImg{
-    margin-right : 4em;
-}
-.eraserImg{
-    background-image: url(https://static.vecteezy.com/system/resources/previews/004/557/509/original/eraser-cartoon-object-vector.jpg);
-    background-size: cover;
-}
+
+
 .left{
     height : 100vh;
     width : 200px;
@@ -41,6 +36,7 @@ canvas{
     background: white;
 }
 .bottom{
+    z-index: 99;
     background: #455054;
     border : 2px solid #308695;
     width: 100%;
@@ -51,7 +47,7 @@ canvas{
 
 }
 
-.color {
+.rounded {
     width : 50px;
     height : 50px;
     border-radius: 50%;
@@ -144,6 +140,7 @@ li:nth-child(even) {
   }
 
 
+
 .blink_me {
 animation: blinker 2s linear infinite;
 }
@@ -152,4 +149,46 @@ animation: blinker 2s linear infinite;
 50% {
     opacity: 0;
 }
+}
+
+
+.brushes{
+    position: absolute;
+    right : 0;
+    top : 0;
+    width: 100px;
+    height : 100vh;
+    background: #455054;
+    border: 1px solid #308695;
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.brush1{
+    background-color: white;
+    background-image: url(https://www.svgrepo.com/show/24909/pencil.svg);
+    background-size: cover;
+}
+.brush2{
+    background-color: white;
+    background-image: url(https://www.svgrepo.com/show/25294/pen.svg);
+    background-size: cover;
+}
+.brush3{
+    background-color: white;
+    background-image: url(https://www.svgrepo.com/show/14943/pen.svg);
+    background-size: cover;
+}
+.brush4{
+    background-color: white;
+    background-image: url(https://www.svgrepo.com/show/53692/brush.svg);
+    background-size:contain;
+}
+
+.eraserImg{
+    background-image: url(https://static.vecteezy.com/system/resources/previews/004/557/509/original/eraser-cartoon-object-vector.jpg);
+    background-size: cover;
 }

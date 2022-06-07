@@ -24,23 +24,30 @@
             <p>&nbsp;&nbsp;Current users : </p>
             <ul class="listOfUsers"></ul>
         </div>
+        <div class="brushes">
+            <div class="b rounded brush1 active" onclick="setLineWidth(2,this)"></div>
+            <div class="b rounded brush2" onclick="setLineWidth(1,this)"></div>
+            <div class="b rounded brush3" onclick="setLineWidth(10,this)"></div>
+            <div class="b rounded brush4" onclick="setLineWidth(20,this)"></div>
+            <div class="b rounded eraserImg"onclick="setLineWidth(30,this)"></div>
+        </div>
+
         <div class="right">
             <canvas></canvas>
             <div class="bottom">
                 <div class="basic-colors">
-                    <div class="color eraserImg"onclick="drawingColor('erase',this)"></div>
-                    <div class="color active" style="background : black;" onclick="drawingColor('black',this)"></div>
-                    <div class="color" style="background : gray;" onclick="drawingColor('gray',this)"></div>
-                    <div class="color" style="background : white;" onclick="drawingColor('white',this)"></div>
+                    <div class="c rounded active" style="background : black;" onclick="drawingColor('black',this)"></div>
+                    <div class="c rounded" style="background : gray;" onclick="drawingColor('gray',this)"></div>
+                    <div class="c rounded" style="background : white;" onclick="drawingColor('white',this)"></div>
                 </div>
 
                 <div class="more-colors">
-                    <div class="color" style="background : rgb(241, 36, 36);" onclick="drawingColor('rgb(241, 36, 36)',this)"></div>
-                    <div class="color" style="background : orange;" onclick="drawingColor('orange',this)"></div>
-                    <div class="color" style="background : yellow;" onclick="drawingColor('yellow',this)"></div>
-                    <div class="color" style="background : rgb(50, 230, 50);" onclick="drawingColor('rgb(50, 230, 50)',this)"></div>
-                    <div class="color" style="background : rgb(0, 106, 255);" onclick="drawingColor('rgb(0, 106, 255)',this)"></div>
-                    <div class="color" style="background : cyan;" onclick="drawingColor('cyan',this)" ></div>
+                    <div class="c rounded" style="background : rgb(241, 36, 36);" onclick="drawingColor('rgb(241, 36, 36)',this)"></div>
+                    <div class="c rounded" style="background : orange;" onclick="drawingColor('orange',this)"></div>
+                    <div class="c rounded" style="background : yellow;" onclick="drawingColor('yellow',this)"></div>
+                    <div class="c rounded" style="background : rgb(50, 230, 50);" onclick="drawingColor('rgb(50, 230, 50)',this)"></div>
+                    <div class="c rounded" style="background : rgb(0, 106, 255);" onclick="drawingColor('rgb(0, 106, 255)',this)"></div>
+                    <div class="c rounded" style="background : cyan;" onclick="drawingColor('cyan',this)" ></div>
 
                 </div>
 
