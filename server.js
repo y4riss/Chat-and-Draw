@@ -19,6 +19,7 @@ app.get('/',(req,res)=>{
 
 
 let userList = [] //list of current users
+let metaData = [] // idea : when a new user comes , render what has been drew before 
 
 //this fires when a connection is established ( new client connected)
 io.on('connection',socket=>{
