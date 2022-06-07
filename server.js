@@ -36,7 +36,7 @@ io.on('connection',socket=>{
         })
         io.emit('renderUser',userList)
         socket.emit('renderPreviousDrawings',lines) // when a user get added , the server sends to that user the informations about the
-        // current board ( the lines that had been drew up until now , and they get rendered)
+        // current board ( the lines that had been drawn up until now , and they get rendered)
 
     })
 
@@ -74,7 +74,7 @@ io.on('connection',socket=>{
 })
 
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 server.listen(PORT,()=>{
     console.log(`listening on port ${PORT}...`)
 })
