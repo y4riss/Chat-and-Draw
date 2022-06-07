@@ -81,9 +81,19 @@ socket.on('renderUser',data=>{
     const ul = document.querySelector("ul");
     ul.innerHTML = ''
     data.forEach(user => {
-    
     const li = document.createElement("li")
-    li.textContent = user.username
+    
+     if(user.username == username) {
+         const span = document.createElement("span")
+         span.classList.add("blink_me")
+         span.textContent = ">> "
+        li.appendChild(span)
+     }
+
+     const span2 = document.createElement("span")
+     span2.textContent = user.username
+     li.appendChild(span2)
+
     ul.appendChild(li)
     });
 })

@@ -6,7 +6,7 @@
     font-family: 'Roboto', sans-serif;
 }
 body{
-    background: #ffe8e8;
+    background: #151515;
     overflow: hidden;
 }
 div .eraserImg{
@@ -34,7 +34,8 @@ div .eraserImg{
 
 }
 canvas{
-    border : 7px solid black;
+    border-radius: 10px;
+    border : 8px solid #308695;
     margin: 0 auto;
     margin-top : 2em;
     background: white;
@@ -84,36 +85,41 @@ canvas{
     justify-content: center;
     flex-direction: column;
     height: 100vh;
+    color : #f9dce1;
 
 }
 form > *{
     display: inline;
     font-size: 2em;
 }
-
+form {
+    margin-top: 120px;
+}
 
 input[type="text"]{
     outline : none;
     border : none;
     padding : .5em;
-    color : white;
+    color : #f9dce1;
     text-align: center;
     border-radius: 4px;
-    background: #222;
+    background: #308695;
 }
 button{
     width : 100%;
     outline: none;
-    border: 1px solid white;
-    background : #222;
-    color : white;
+    border: 1px solid #f9dce1;
+    background : #308695;
+    color : #f9dce1;
     padding : .5em 1.2em;
     cursor: pointer;
 }
 
 .title{
+    padding: 1em;
     font-size: 4em;
-    margin-bottom: 5em;
+    margin-bottom: 1em;
+    background : #308695;
 }
 
 .left p{
@@ -126,6 +132,7 @@ li{
     margin-block : 10px;
 }
 
+
 li:nth-child(odd) {
     background : #308695;
     color : #ffe8e8;
@@ -135,3 +142,14 @@ li:nth-child(even) {
     background : #e69d45;
     color : #455054;
   }
+
+
+.blink_me {
+animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+50% {
+    opacity: 0;
+}
+}
