@@ -29,7 +29,6 @@ const handleSubmit = (e)=>{
         const emptyUser = /^\s*$/
         username = input.value
         const found = userList.some(user => user.username === username);
-        console.log(userList)
         if(found){
             alert("username already exists")
         }
@@ -134,7 +133,6 @@ socket.on('userIsDrawing',data=>{
         ctx.fillStyle = data.c
         ctx.arc(data.x, data.y ,data.l, 0, Math.PI*2, true);
         ctx.fill();
-        console.log('another user is drawing')
 
 })
 
@@ -143,7 +141,6 @@ socket.on('renderPreviousDrawings',lines =>{
             for(let i = 0 ; i < lineCoords.length ; i++){
 
              startDrawing(lineCoords[i].x,lineCoords[i].y,lineCoords[i].c,lineCoords[i].l)
-                console.log('drawing previous things')
             }
     })
 })

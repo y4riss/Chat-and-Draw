@@ -94,7 +94,6 @@ const checkInactivity = async ()=>{
             mouseUP = false
             break
         }
-        console.log(inactivity)
         await sleep(1000)
 
         if(inactivity === MAX_SECONDS_WITHOUT_DRAWING ) {
@@ -115,7 +114,8 @@ const checkInactivity = async ()=>{
 checkInactivity()
 
 const PORT = process.env.PORT || 3000
+
 server.listen(PORT,()=>{
-    console.log(`listening on port ${PORT}...`)
+    console.log("http://localhost:"+PORT)
 })
 
