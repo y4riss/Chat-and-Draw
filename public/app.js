@@ -118,7 +118,15 @@ socket.on('renderUser',data=>{
     });
 })
 
+const startDrawing = (x,y,c,l)=>{
+    ctx.beginPath()
+    ctx.fillStyle = c
+    ctx.arc(x,y,l, 0, Math.PI*2, true);
+    ctx.fill();
+}
+
 // mousedown and mousemove events are sent by the server to all clients , to update the screen in real time
+
 
 socket.on('userIsDrawing',data=>{
    
@@ -126,17 +134,16 @@ socket.on('userIsDrawing',data=>{
         ctx.fillStyle = data.c
         ctx.arc(data.x, data.y ,data.l, 0, Math.PI*2, true);
         ctx.fill();
+        console.log('another user is drawing')
 
 })
 
 socket.on('renderPreviousDrawings',lines =>{
     lines.map(lineCoords =>{
             for(let i = 0 ; i < lineCoords.length ; i++){
-            if(i==0)    startDrawing(lineCoords[i].x,lineCoords[i].y,lineCoords[i].l,lineCoords[i].c)
-            else{
-                ctx.lineTo(lineCoords[i].x,lineCoords[i].y)
-                ctx.stroke()
-            }
+
+             startDrawing(lineCoords[i].x,lineCoords[i].y,lineCoords[i].c,lineCoords[i].l)
+                console.log('drawing previous things')
             }
     })
 })
@@ -160,12 +167,9 @@ drawing = true
 
 canvas.addEventListener("pointermove",e=>{
 if(drawing) {
-    socket.emit('userIsDrawing',{x : e.offsetX , y : e.offsetY ,c : color , l : lineWidth});
+    socket.emit('userIsDrawing',{x : e.offsetX , y : e.offsetY ,c : color , l : lineWidth})
     /* here the client keeps sending the coords of the mouse until the mouse is up */
-    ctx.beginPath()
-    ctx.fillStyle = color
-    ctx.arc(e.offsetX, e.offsetY ,lineWidth, 0, Math.PI*2, true);
-    ctx.fill();
+    startDrawing(e.offsetX, e.offsetY,color,lineWidth)
 
 }
 })
