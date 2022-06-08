@@ -90,13 +90,7 @@ const setLineWidth = (width,element)=>{
     
 }
 
-//this function starts drawing on the screen with the appropriate color and line width
-const startDrawing = (x,y,l,c)=>{
-    ctx.beginPath()
-    ctx.lineWidth = l
-    ctx.strokeStyle = c
-    ctx.moveTo(x,y)
-};
+
 
 /* ______________________________________________________SOCKETS______________________________________________*/
 
@@ -125,18 +119,14 @@ socket.on('renderUser',data=>{
 })
 
 // mousedown and mousemove events are sent by the server to all clients , to update the screen in real time
-socket.on('mousedown',data=>{
-    if(!drawing){
-    startDrawing(data.x,data.y,data.l,data.c)
-    }
 
+socket.on('userIsDrawing',data=>{
+   
+        ctx.beginPath()
+        ctx.fillStyle = data.c
+        ctx.arc(data.x, data.y ,data.l, 0, Math.PI*2, true);
+        ctx.fill();
 
-})
-socket.on('mousemove',data=>{
-    if(!drawing){
-    ctx.lineTo(data.x,data.y)
-    ctx.stroke()
-    }
 })
 
 socket.on('renderPreviousDrawings',lines =>{
@@ -162,22 +152,23 @@ let drawing = false // it is set to true when mouse is down , and false when mou
 
 //the drawing logic goes down here 
 
-canvas.addEventListener("mousedown",e=>{
+canvas.addEventListener("pointerdown",e=>{
 socket.emit('mousedown',{x : e.offsetX , y : e.offsetY , c : color , l : lineWidth}); /* here the client send to the server the coords 
 of where the drawing started , along with the color chosen and the linewidth */
-startDrawing(e.offsetX,e.offsetY,lineWidth,color)
 drawing = true
 })
 
-canvas.addEventListener("mousemove",e=>{
+canvas.addEventListener("pointermove",e=>{
 if(drawing) {
-    socket.emit('mousemove',{x : e.offsetX , y : e.offsetY ,c : color , l : lineWidth});
+    socket.emit('userIsDrawing',{x : e.offsetX , y : e.offsetY ,c : color , l : lineWidth});
     /* here the client keeps sending the coords of the mouse until the mouse is up */
-    ctx.lineTo(e.offsetX,e.offsetY)
-    ctx.stroke()
+    ctx.beginPath()
+    ctx.fillStyle = color
+    ctx.arc(e.offsetX, e.offsetY ,lineWidth, 0, Math.PI*2, true);
+    ctx.fill();
 }
 })
-canvas.addEventListener("mouseup",()=>{
+canvas.addEventListener("pointerup",()=>{
     drawing = false
     socket.emit('mouseup')
 })

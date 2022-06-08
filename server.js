@@ -45,17 +45,11 @@ io.on('connection',socket=>{
     })
 
 
-    // mousedown and mousemove are sent by the client who is currently drawing , and the server sends the data (coords , color , linewidth)
-    // to all the clients except the one drawing because he already sees what he's drawing.
-    socket.on('mousedown',data=>{
-        inactivity = 0
-        lineCoords.push(data) // this represents the first element of lineCoords array , which is the coords of where the line begins
-        socket.broadcast.emit('mousedown',data)
-    })
-    socket.on('mousemove',data=>{
+
+    socket.on('userIsDrawing',data=>{
         inactivity = 0
         lineCoords.push(data) // and these are the rest of the coords along with the color and width
-        socket.broadcast.emit('mousemove',data)
+        socket.broadcast.emit('userIsDrawing',data)
     })
 
     socket.on('mouseup',()=>{

@@ -5,11 +5,10 @@
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
 }
-body{
-    background: #151515;
-    overflow: hidden;
-}
 
+  body {
+    background: #151515;
+  }
 
 .left{
     height : 100vh;
@@ -86,10 +85,14 @@ canvas{
 }
 form > *{
     display: inline;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 form {
-    margin-top: 120px;
+    margin-top: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 input[type="text"]{
@@ -100,6 +103,11 @@ input[type="text"]{
     text-align: center;
     border-radius: 4px;
     background: #308695;
+    width : 100%;
+}
+::placeholder{
+    font-size: .5em;
+    color : white;
 }
 button{
     width : 100%;
@@ -112,10 +120,8 @@ button{
 }
 
 .title{
-    padding: 1em;
     font-size: 4em;
     margin-bottom: 1em;
-    background : #308695;
 }
 
 .left p{
@@ -191,4 +197,27 @@ animation: blinker 2s linear infinite;
 .eraserImg{
     background-image: url(https://static.vecteezy.com/system/resources/previews/004/557/509/original/eraser-cartoon-object-vector.jpg);
     background-size: cover;
+}
+
+@media  screen and (max-width: 860px)  {
+    .title {
+        font-size: 2em;
+    }
+
+    .brushes{
+        width : auto;
+    }
+    .rounded{
+        width: 30px;
+        height: 30px;
+    }
+    .bottom{
+        display: grid;
+    }
+    canvas{
+        z-index: 1;
+    }
+
+
+
 }
