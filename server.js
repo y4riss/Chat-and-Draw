@@ -21,6 +21,10 @@ app.get('/',(req,res)=>{
 let userList = [] //list of current users
 let lines = [] // each element is an array that has the line that has been drawing up until now
 let lineCoords = [] // holds the info about a line in the board ( x , y , width , color)
+let inactivity = 0 // if  inactivity reaches 30 : clear the white board
+let mouseUP = false
+let boardCleared = false
+const MAX_SECONDS_WITHOUT_DRAWING = 20
 
 io.on('connection',socket=>{
     //update user list whenever a client reaches
@@ -44,18 +48,27 @@ io.on('connection',socket=>{
     // mousedown and mousemove are sent by the client who is currently drawing , and the server sends the data (coords , color , linewidth)
     // to all the clients except the one drawing because he already sees what he's drawing.
     socket.on('mousedown',data=>{
+        inactivity = 0
         lineCoords.push(data) // this represents the first element of lineCoords array , which is the coords of where the line begins
         socket.broadcast.emit('mousedown',data)
     })
     socket.on('mousemove',data=>{
+        inactivity = 0
         lineCoords.push(data) // and these are the rest of the coords along with the color and width
         socket.broadcast.emit('mousemove',data)
     })
 
     socket.on('mouseup',()=>{
         //when the user finishes drawing , this function fires , it addes the line to the lines array , and reset the line array
+        mouseUP = true
+        if(boardCleared) {
+            mouseUP =false
+            boardCleared = false
+        }
+        checkInactivity()
         lines.push(lineCoords)
         lineCoords = []
+
     })
     
     // when a user disconnect , it gets removed from the userList
@@ -71,8 +84,41 @@ io.on('connection',socket=>{
 
     })
 
+
+
 })
 
+
+
+const  sleep = ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+const checkInactivity = async ()=>{
+    while(true){
+        if(mouseUP){
+            mouseUP = false
+            break
+        }
+        console.log(inactivity)
+        await sleep(1000)
+
+        if(inactivity === MAX_SECONDS_WITHOUT_DRAWING ) {
+            io.emit('clearBoard')
+            lineCoords = []
+            lines = []
+            io.emit('renderPreviousDrawings',lines)
+            boardCleared = true
+            inactivity = 0
+            break
+        }
+
+        inactivity++
+
+    }
+}
+
+checkInactivity()
 
 const PORT = process.env.PORT || 3000
 server.listen(PORT,()=>{

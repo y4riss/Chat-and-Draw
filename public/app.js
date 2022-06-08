@@ -19,6 +19,8 @@ let brushColor = color
 ctx.lineWidth = lineWidth;
 
 
+
+
 // this function is fired when the user enters his username
 // if username is valid ( not empty , doesnt already exist) , it gets added to userList by sending it to the server
 // and the drawing page gets shown
@@ -148,6 +150,11 @@ socket.on('renderPreviousDrawings',lines =>{
             }
     })
 })
+
+socket.on('clearBoard',()=>{
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+})
+
 /* ______________________________________________________END OF SOCKETS______________________________________________*/
 
 
