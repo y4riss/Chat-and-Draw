@@ -166,6 +166,7 @@ if(drawing) {
     ctx.fillStyle = color
     ctx.arc(e.offsetX, e.offsetY ,lineWidth, 0, Math.PI*2, true);
     ctx.fill();
+
 }
 })
 canvas.addEventListener("pointerup",()=>{

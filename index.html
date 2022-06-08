@@ -10,7 +10,7 @@
 
 </head>
 <body>
-    <div class="login hide">
+    <div class="login ">
         <p class="title">Welcome to joeDraw app !</p>
         <form action="" onsubmit="handleSubmit(event)">
             <input type="text" placeholder="Enter a username to join the room..."><br><br>
@@ -18,7 +18,7 @@
             
         </form>
     </div>
-    <div class="container ">
+    <div class="container hide">
         <div class="left">
             <p>&nbsp;&nbsp;Current users : </p>
             <ul class="listOfUsers"></ul>
@@ -33,24 +33,25 @@
 
         <div class="right">
             <canvas></canvas>
-            <div class="bottom">
-                <div class="basic-colors">
-                    <div class="c rounded active" style="background : black;" onclick="drawingColor('black',this)"></div>
-                    <div class="c rounded" style="background : gray;" onclick="drawingColor('gray',this)"></div>
-                    <div class="c rounded" style="background : white;" onclick="drawingColor('white',this)"></div>
-                </div>
+          
+        </div>
+        <div class="bottom">
+            <div class="basic-colors">
+                <div class="c rounded active" style="background : black;" onclick="drawingColor('black',this)"></div>
+                <div class="c rounded" style="background : gray;" onclick="drawingColor('gray',this)"></div>
+                <div class="c rounded" style="background : white;" onclick="drawingColor('white',this)"></div>
+            </div>
 
-                <div class="more-colors">
-                    <div class="c rounded" style="background : rgb(241, 36, 36);" onclick="drawingColor('rgb(241, 36, 36)',this)"></div>
-                    <div class="c rounded" style="background : orange;" onclick="drawingColor('orange',this)"></div>
-                    <div class="c rounded" style="background : yellow;" onclick="drawingColor('yellow',this)"></div>
-                    <div class="c rounded" style="background : rgb(50, 230, 50);" onclick="drawingColor('rgb(50, 230, 50)',this)"></div>
-                    <div class="c rounded" style="background : rgb(0, 106, 255);" onclick="drawingColor('rgb(0, 106, 255)',this)"></div>
-                    <div class="c rounded" style="background : cyan;" onclick="drawingColor('cyan',this)" ></div>
-
-                </div>
+            <div class="more-colors">
+                <div class="c rounded" style="background : rgb(241, 36, 36);" onclick="drawingColor('rgb(241, 36, 36)',this)"></div>
+                <div class="c rounded" style="background : orange;" onclick="drawingColor('orange',this)"></div>
+                <div class="c rounded" style="background : yellow;" onclick="drawingColor('yellow',this)"></div>
+                <div class="c rounded" style="background : rgb(50, 230, 50);" onclick="drawingColor('rgb(50, 230, 50)',this)"></div>
+                <div class="c rounded" style="background : rgb(0, 106, 255);" onclick="drawingColor('rgb(0, 106, 255)',this)"></div>
+                <div class="c rounded" style="background : cyan;" onclick="drawingColor('cyan',this)" ></div>
 
             </div>
+
         </div>
     </div>
 
