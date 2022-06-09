@@ -14,11 +14,11 @@
 
 .left{
     height : 100vh;
-    width : 200px;
-    background  : #455054;
+    width : 35%;
     color : #ffe8e8;
-    padding: 1em 0;
+    padding: 1em;
     overflow-y: hidden;
+    cursor : default;
 }
 .container{
     width : 100%;
@@ -26,37 +26,35 @@
 }
 .right{
     width : 100%;
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    padding : 1em;
 
 }
 canvas{
     border-radius: 10px;
-    border : 8px solid #308695;
-    margin: 0 auto;
-    margin-top : 2em;
-    background: white;
-}
-.bottom{
-    z-index: 99;
-    background: #455054;
-    position: absolute;
-    bottom : 0;
+    border : 1px solid #308695;
+    background: black;
 
+}
+.top{
+    width : 10%;
+    height : 20px;
     border : 2px solid #308695;
-    width: 100%;
-    
-    display: flex;
+    padding: 1.4em;
+    border-radius: 20px;
+    display:  flex;
     align-items: center;
     justify-content: center;
-    
-    padding: 1em;
-
+    gap: 1em;
+    margin : 0 auto;
+    margin-block : .5em;
 
 }
 
 .rounded {
-    width : 50px;
-    height : 50px;
+    width : 20px;
+    height : 20px;
     border-radius: 50%;
     border : 2px solid white;
     margin-inline: .6em;
@@ -103,7 +101,7 @@ form {
     flex-direction: column;
 }
 
-input[type="text"]{
+.login input[type="text"]{
     outline : none;
     border : none;
     padding : .5em;
@@ -113,7 +111,7 @@ input[type="text"]{
     background: #308695;
     width : 100%;
 }
-::placeholder{
+.login ::placeholder{
     font-size: .5em;
     color : white;
 }
@@ -133,103 +131,82 @@ button{
 }
 
 .left p{
-    margin-bottom: .5em;
-}
-li{
-    padding : .5em 1em;
-    list-style: none;
-    font-weight: bolder;
-    margin-block : 10px;
+    margin-bottom: 5%;
 }
 
-
-li:nth-child(odd) {
-    background : #308695;
-    color : #ffe8e8;
-  }
-  
-li:nth-child(even) {
-    background : #e69d45;
-    color : #455054;
-  }
-
-
-
-.blink_me {
-animation: blinker 2s linear infinite;
-}
-
-@keyframes blinker {
-50% {
-    opacity: 0;
-}
-}
-
-
-.brushes{
-    position: absolute;
-    right : 0;
-    top : 0;
-    width: 100px;
-    height : 100vh;
-    background: #455054;
+.left input{
+    padding : 1em;
+    outline : none;
+    border : none;
+    font-size: 1em;
+    background: #151515;
     border: 1px solid #308695;
-    display : flex;
+    color: white;
+    padding: 1em;
+    padding-right: 2em;
+    width: 100%;
+}
+
+
+.chat-title{
+    font-size: 1.5em;
+    text-align: center;
+    margin-bottom : 2em;
+
+}
+
+.chat-room{
+    background : #151515;
+    height : 100%;
+    position: relative;
+    color : white;
+    padding : .5em;
+    width: fit-content;
+}
+
+.chat-input img{
+    width : 20px;
+    height : 20px;
+    position: absolute;
+    right: 3%;
+}
+.chat-input{
+    position: relative;
+    bottom: 0;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 2em;
+    justify-content: space-between;
+    width: 100%;
+    background : red;
+
+   
+} 
+
+.chat-messages ul{
+    list-style: none;
+    word-break: break-all;
+    line-height: 2em;
 }
+.chat-messages{
+    overflow-y: auto;
+    height: 80%;
+    color : white;
+    border : 1px solid #308695;
+    padding : 1em;
 
-.brush1{
-    background-color: white;
-    background-image: url(https://www.svgrepo.com/show/24909/pencil.svg);
-    background-size: cover;
 }
-.brush2{
-    background-color: white;
-    background-image: url(https://www.svgrepo.com/show/25294/pen.svg);
-    background-size: cover;
+.online-users{
+    text-align: center;
+    font-weight: bolder;
+    font-size: small;
 }
-.brush3{
-    background-color: white;
-    background-image: url(https://www.svgrepo.com/show/14943/pen.svg);
-    background-size: cover;
+.user{
+    color :     #308695;
 }
-.brush4{
-    background-color: white;
-    background-image: url(https://www.svgrepo.com/show/53692/brush.svg);
-    background-size:contain;
+.currentUser{
+    color : red;
 }
-
-.eraserImg{
-    background-image: url(https://static.vecteezy.com/system/resources/previews/004/557/509/original/eraser-cartoon-object-vector.jpg);
-    background-size: cover;
-}
-
-@media  screen and (max-width: 860px)  {
-    .title {
-        font-size: 2em;
-    }
-
-    .brushes{
-        width : auto;
-    }
-    .rounded{
-        width: 30px;
-        height: 30px;
-    }
-
-    .bottom > * > *{
-        width : 20px;
-        height : 20px;
-    }
-    canvas{
-        z-index: 1;
-    }
-    .basic-colors{
-        margin-right : .5em;
-    }
-
-
+.joinLeave{
+    color : gray;
+    font-size: .8em;
 }

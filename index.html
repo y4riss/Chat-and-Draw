@@ -6,6 +6,10 @@
     <meta name = "viewport" content = "width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no">
 
     <link rel="stylesheet" href="/style.css"> 
+    <link rel="stylesheet" href="/paletteStyle.css"> 
+    <link rel="stylesheet" href="/brushStyle.css"> 
+
+
     <title>joeDraw App</title>
 
 </head>
@@ -20,10 +24,26 @@
     </div>
     <div class="container hide">
         <div class="left">
-            <p>&nbsp;&nbsp;Current users : </p>
-            <ul class="listOfUsers"></ul>
+                <div class="chat-room">
+                    <p class="chat-title">Welcome to the chat-room</p>
+                        <p class="online-users"></p>
+
+                    <div class="chat-messages">
+                       <ul></ul>
+                    </div>
+
+                    <div class="chat-input">
+                        <input id="chatInput" type="text" onkeydown="handleKeyDown(event)">
+                        <img src="send.svg" alt="" onclick="sendMessage()" style="cursor : pointer;">                        
+                    </div>
+                </div>
+            <!-- <ul class="listOfUsers"></ul> -->
         </div>
-        <div class="brushes">
+       
+
+        <div class="right">
+            
+             <div class="brushes hide">
             <div class="b rounded brush1 active" onclick="setLineWidth(2,this)"></div>
             <div class="b rounded brush2" onclick="setLineWidth(1,this)"></div>
             <div class="b rounded brush3" onclick="setLineWidth(10,this)"></div>
@@ -31,26 +51,66 @@
             <div class="b rounded eraserImg"onclick="setLineWidth(30,this)"></div>
         </div>
 
-        <div class="right">
+            <div class="palette hide">
+                <div class="colors">
+                        <div class="color" style="background : #e60000;" onclick="drawingColor('#e60000',this)"></div>
+                        <div class="color" style="background : #ff0000;" onclick="drawingColor('#ff0000',this)"></div>
+                        <div class="color" style="background : #ff3333;" onclick="drawingColor('#ff3333',this)"></div>
+                        <div class="color" style="background : #ff6666;" onclick="drawingColor('#ff6666',this)"></div>
+                        <div class="color" style="background : #ff9999;" onclick="drawingColor('#ff9999',this)"></div>
+
+                        <div class="color" style="background : #e68a00;" onclick="drawingColor('#e68a00',this)"></div>
+                        <div class="color" style="background : #ff9900;" onclick="drawingColor('#ff9900',this)"></div>
+                        <div class="color" style="background : #ffad33;" onclick="drawingColor('#ffad33',this)"></div>
+                        <div class="color" style="background : #ffc266;" onclick="drawingColor('#ffc266',this)"></div>
+                        <div class="color" style="background : #ffd699;" onclick="drawingColor('#ffd699',this)"></div>
+
+                        <div class="color" style="background : #e6e600;" onclick="drawingColor('#e6e600',this)"></div>
+                        <div class="color" style="background : #ffff00;" onclick="drawingColor('#ffff00',this)"></div>
+                        <div class="color" style="background : #ffff33;" onclick="drawingColor('#ffff33',this)"></div>
+                        <div class="color" style="background : #ffff66;" onclick="drawingColor('#ffff66',this)"></div>
+                        <div class="color" style="background : #ffff99;" onclick="drawingColor('#ffff99',this)"></div>
+
+                        <div class="color" style="background : #00e600;" onclick="drawingColor('#00e600',this)"></div>
+                        <div class="color" style="background : #00ff00;" onclick="drawingColor('#00ff00',this)"></div>
+                        <div class="color" style="background : #33ff33;" onclick="drawingColor('#33ff33',this)"></div>
+                        <div class="color" style="background : #66ff66;" onclick="drawingColor('#66ff66',this)"></div>
+                        <div class="color" style="background : #99ff99;" onclick="drawingColor('#99ff99',this)"></div>
+
+                        <div class="color" style="background : #0000b3;" onclick="drawingColor('#0000b3',this)"></div>
+                        <div class="color" style="background : #0000ff;" onclick="drawingColor('#0000ff',this)"></div>
+                        <div class="color" style="background : #3333ff;" onclick="drawingColor('#3333ff',this)"></div>
+                        <div class="color" style="background : #6666ff;" onclick="drawingColor('#6666ff',this)"></div>
+                        <div class="color" style="background : #9999ff;" onclick="drawingColor('#9999ff',this)"></div>
+
+                        <div class="color" style="background : #2d004d;" onclick="drawingColor('#2d004d',this)"></div>
+                        <div class="color" style="background : #4b0082;" onclick="drawingColor('#4b0082',this)"></div>
+                        <div class="color" style="background : #6800b3;" onclick="drawingColor('#6800b3',this)"></div>
+                        <div class="color" style="background : #8600e6;" onclick="drawingColor('#8600e6',this)"></div>
+                        <div class="color" style="background : #9f1aff;" onclick="drawingColor('#9f1aff',this)"></div>
+
+                        <div class="color" style="background : #000000;" onclick="drawingColor('#000000',this)"></div>
+                        <div class="color" style="background : #404040;" onclick="drawingColor('#404040',this)"></div>
+                        <div class="color" style="background : #808080;" onclick="drawingColor('#808080',this)"></div>
+                        <div class="color" style="background : #bfbfbf;" onclick="drawingColor('#bfbfbf',this)"></div>
+                        <div class="color" style="background : #ffffff;" onclick="drawingColor('#ffffff',this)"></div>
+                        
+                </div> 
+                <div class="color customColor" style="background : #ffffff; cursor: default; width: 100%; padding: 1em; " ></div>
+
+                <input id="inputColor" type="text" placeholder="#000000" onchange="handleCustomColor(this)">
+            </div>
+
+            <div class="top">
+                <img  class="brush-picker" src="brush.svg" alt="brush-picker">
+                <img class="pick-btn" src="palette.svg" alt="color-picker">
+            </div>
+
+
             <canvas></canvas>
           
         </div>
-        <div class="bottom">
-            <div class="basic-colors">
-                <div class="c rounded active" style="background : black;" onclick="drawingColor('black',this)"></div>
-                <div class="c rounded" style="background : gray;" onclick="drawingColor('gray',this)"></div>
-                <div class="c rounded" style="background : white;" onclick="drawingColor('white',this)"></div>
-            </div>
 
-            <div class="more-colors">
-                <div class="c rounded" style="background : rgb(241, 36, 36);" onclick="drawingColor('rgb(241, 36, 36)',this)"></div>
-                <div class="c rounded" style="background : orange;" onclick="drawingColor('orange',this)"></div>
-                <div class="c rounded" style="background : yellow;" onclick="drawingColor('yellow',this)"></div>
-                <div class="c rounded" style="background : rgb(50, 230, 50);" onclick="drawingColor('rgb(50, 230, 50)',this)"></div>
-                <div class="c rounded" style="background : rgb(0, 106, 255);" onclick="drawingColor('rgb(0, 106, 255)',this)"></div>
-                <div class="c rounded" style="background : cyan;" onclick="drawingColor('cyan',this)" ></div>
-
-            </div>
 
         </div>
     </div>
@@ -60,17 +120,23 @@
     <script src="/app.js"></script>
     <script>
 
+        const colorPicker = document.querySelector(".pick-btn")
+        const brushPicker = document.querySelector('.brush-picker')
+
+
+        const palette = document.querySelector(".palette")
         const brushes = document.querySelector(".brushes")
-        const c = document.querySelector("canvas")
-        brushes.addEventListener("pointerdown",(e=>{
-            c.style.zIndex = "0"
-            e.target.style.zIndex = "10"
-        }))
-        c.addEventListener("pointerdown",e=>{
-            brushes.style.zIndex = "0"
-            e.target.style.zIndex = "10"
+            
+        colorPicker.addEventListener("click",(e)=>{
+    
+            brushes.classList.add("hide");
+           palette.classList.toggle("hide")
         })
-        
+
+        brushPicker.addEventListener("click",(e)=>{
+            palette.classList.add("hide");
+           brushes.classList.toggle("hide")
+        })
     </script>
 </body>
 </html>

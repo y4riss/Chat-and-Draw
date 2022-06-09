@@ -1,0 +1,53 @@
+.colors{
+    display : grid;
+    grid-template-columns: repeat(5,1fr);
+    width: 150px;
+    height : 230px;
+    border-radius: 10px;
+
+}
+
+.color{
+    
+    width : 100%;
+    height : 100%;
+    cursor : pointer;
+    border : 1px solid rgb(245, 243, 243);
+}
+.palette{
+    max-width: 150px;
+    position: absolute;
+    left: 63.5%;
+    top: 9.5%;
+    z-index: 999;
+
+}
+
+#inputColor{
+    margin-top: 1em;
+    border : 1px solid rgb(213, 213, 213);
+    outline : none;
+    line-height: 10px;
+    text-align: center;
+    padding : .3em;
+    max-width: 100%;
+    font-size: 1em;
+    border-radius: 10px;
+}
+.ligne{
+    margin-top : 1em;
+    height : 2px;
+    background : rgb(213, 213, 213);
+    display: block;
+}
+.hide{
+    display : none;
+}
+.top img{
+    width : 30px;
+    height : 30px;
+    cursor : pointer;
+}
+.pick-btn{
+    width: 30px;
+}

@@ -9,10 +9,10 @@ let userList = []
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth/1.4
-canvas.height = window.innerHeight/1.4
+canvas.width = window.innerWidth / 1.35
+canvas.height = window.innerHeight / 1.2
 
-let color = "black"
+let color = "white"
 let lineWidth = 2
 let currentBrush = 2
 let brushColor = color
@@ -34,22 +34,41 @@ const handleSubmit = (e)=>{
         }
         else if(username.match(emptyUser)) alert("username must not be empty")
         else{
-        socket.emit('addUser',username);
+        connectionAlert(username,"joined")
+        socket.emit('joined',username);
         document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAA4f8AAAAAAKjP8ADjkPAABLTMALBwugCQs9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERURERERERERVVERERERERM1URERERERMzMUQRERERETMRREEREREREQAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFGYREREREQACZhERERERECIhERERERERIhHH/wAAg/8AAAH/AAAA/wAAAH8AAIA/AADAHwAA4A8AAPAHAAD4AwAA/AEAAP4AAAD/AAAA/4AAAP/AAAD/4AAA),auto";
         login.classList.add("hide");
         container.classList.remove("hide");
+        
+
         
         }
 
         input.value = ""
 }
 
+const handleCustomColor = input =>{
+    
+    const c = input.value
+    const colorChecker = /^#[a-f0-9]{6}$/ig
+    const customColor = document.querySelector(".customColor")
+    if(c.match(colorChecker))
+    drawingColor(c,customColor)
+
+}
+
 // this function handles the color choice
 const drawingColor = (c,element)=>{
     document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAA4f8AAAAAAKjP8ADjkPAABLTMALBwugCQs9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERURERERERERVVERERERERM1URERERERMzMUQRERERETMRREEREREREQAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFGYREREREQACZhERERERECIhERERERERIhHH/wAAg/8AAAH/AAAA/wAAAH8AAIA/AADAHwAA4A8AAPAHAAD4AwAA/AEAAP4AAAD/AAAA/4AAAP/AAAD/4AAA),auto";
     color = c
+    const input = document.querySelector("#inputColor")
+    const customColor = document.querySelector(".customColor")
+    input.value= c
+    customColor.style.background = c
+
+
     brushColor = color
-    const colors = document.getElementsByClassName("c");
+    const colors = document.getElementsByClassName("color");
     for(let i = 0 ; i < colors.length ; i++){
         colors[i].classList.remove("active")
     }
@@ -70,7 +89,7 @@ const drawingColor = (c,element)=>{
 const setLineWidth = (width,element)=>{
 
         if(width ===30){
-        color = "white"
+        color = "black"
         document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAD/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/8/Pz//Pz8/+Pj4/8AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/8/Pz//Pz8/7W1tf+1tbX/4+Pj/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/tbW1//z8/P/8/Pz//Pz8/7W1tf/j4+P/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/7W1tf/Z2dn/2dnZ/9nZ2f/Z2dn/tbW1/+Pj4/8AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8nuI//J7iP/ye4j/8nuI//J7iP/ye4j/8nuI//AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/2zrx//J8OX/yfDl/8nw5f/J8OX/J7iP/ye4j/8AAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/bOvH/2zrx//J8OX/yfDl/8nw5f8nuI//J7iP/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP9s68f/bOvH/8nw5f/J8OX/yfDl/ye4j/8nuI//AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/2zrx/9s68f/bOvH/2zrx/9s68f/J7iP/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx/8AAIP/AAAB/wAAAP8AAAB/AACAPwAAwB8AAOAPAADwBwAA+AMAAPwDAAD+BwAA//8AAP//AAD//wAA//8AAA==),auto";
         }
 
@@ -89,38 +108,82 @@ const setLineWidth = (width,element)=>{
     
 }
 
+const handleKeyDown = e =>{
 
+    if(e.keyCode == 13) sendMessage();
+}
 
+const sendMessage = () =>{
+
+    const inputMessage = document.querySelector("#chatInput")
+    const message = inputMessage.value
+
+    inputMessage.value = ""
+ 
+    if(!message.match(/^\s*$/))
+    socket.emit('sendMessage',{user : username , msg : message})
+    
+}
+const displayMessages = messages =>{
+    const ul = document.querySelector("ul");
+    const chatMessagesDiv = document.querySelector(".chat-messages");
+    let className = "user"
+    ul.innerHTML = '';
+    console.log(messages)
+    messages.map(line =>{
+        
+        if(line.msg == "has joined the room")  connectionAlert(line.user,"joined") 
+        else if(line.msg == "has left the room") connectionAlert(line.user,"left") 
+        else{
+            if(username == line.user) className = "currentUser"
+            else className = "user"
+            const li = document.createElement("li");
+            li.innerHTML = `<strong class="${className}"> ${line.user}</strong> : ${line.msg}`  ;
+            ul.appendChild(li);
+        }
+    })
+    chatMessagesDiv.scrollTo(0, chatMessagesDiv.scrollHeight);
+}
+const connectionAlert = (user,action)=>{
+    const ul = document.querySelector("ul");
+    const li = document.createElement("li");
+    let verbHave = "has"
+    if(user == username) {
+        user = "You"
+        verbHave = "have"
+    }
+     li.textContent = user + " " + verbHave + " "  + action +  " the chat "
+    li.classList.add("joinLeave")
+    ul.appendChild(li);
+
+}
 /* ______________________________________________________SOCKETS______________________________________________*/
 
 
-// when the client receives the event renderUser , it renders all the users in the dom.
-socket.on('renderUser',data=>{
-    userList = data
-    const ul = document.querySelector("ul");
-    ul.innerHTML = ''
-    data.forEach(user => {
-    const li = document.createElement("li")
-    
-     if(user.username == username) {
-         const span = document.createElement("span")
-         span.classList.add("blink_me")
-         span.textContent = ">> "
-        li.appendChild(span)
-     }
-
-     const span2 = document.createElement("span")
-     span2.textContent = user.username
-     li.appendChild(span2)
-
-    ul.appendChild(li)
-    });
+socket.on('userNumber',number=>{
+    const onlineUsers = document.querySelector(".online-users");
+    onlineUsers.textContent = `( Online users : ${number} )`
 })
+
+socket.on('sendMessage',messages=>{
+
+    displayMessages(messages)
+
+})
+
+socket.on('joined',user=>{
+    connectionAlert(user,"joined")
+})
+
+socket.on('left',user=>{
+    connectionAlert(user,"left")
+})
+
 
 const startDrawing = (x,y,c,l)=>{
     ctx.beginPath()
     ctx.fillStyle = c
-    ctx.arc(x,y,l, 0, Math.PI*2, true);
+    ctx.arc(x,y,l, 0, Math.PI*2);
     ctx.fill();
 }
 
@@ -131,7 +194,7 @@ socket.on('userIsDrawing',data=>{
    
         ctx.beginPath()
         ctx.fillStyle = data.c
-        ctx.arc(data.x, data.y ,data.l, 0, Math.PI*2, true);
+        ctx.arc(data.x, data.y ,data.l, 0, Math.PI*2);
         ctx.fill();
 
 })
@@ -143,6 +206,13 @@ socket.on('renderPreviousDrawings',lines =>{
              startDrawing(lineCoords[i].x,lineCoords[i].y,lineCoords[i].c,lineCoords[i].l)
             }
     })
+})
+
+socket.on('renderPreviousMessages',messages=>{
+
+
+        displayMessages(messages)
+
 })
 
 socket.on('clearBoard',()=>{
@@ -159,6 +229,7 @@ let drawing = false // it is set to true when mouse is down , and false when mou
 canvas.addEventListener("pointerdown",e=>{
 socket.emit('mousedown',{x : e.offsetX , y : e.offsetY , c : color , l : lineWidth}); /* here the client send to the server the coords 
 of where the drawing started , along with the color chosen and the linewidth */
+
 drawing = true
 })
 
