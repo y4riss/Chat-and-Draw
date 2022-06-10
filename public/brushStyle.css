@@ -1,7 +1,8 @@
+.brush-picker-wrap{
+    position : relative;
+}
 .brushes{
     position: absolute;
-    top : 10.5%;
-    left : 58%;
     background: #151515;
     border: 1px solid #308695;
     display : flex;

@@ -8,7 +8,7 @@
 
   body {
     background: #151515;
-    touch-action: none;
+    touch-action:none;
 
   }
 
@@ -23,6 +23,7 @@
 .container{
     width : 100%;
     display: flex;
+
 }
 .right{
     width : 100%;
@@ -36,10 +37,11 @@ canvas{
     border : 1px solid #308695;
     background: black;
 
+
 }
 .top{
-    width : 10%;
-    height : 20px;
+    width: fit-content;
+        height : 20px;
     border : 2px solid #308695;
     padding: 1.4em;
     border-radius: 20px;
@@ -161,7 +163,7 @@ button{
     position: relative;
     color : white;
     padding : .5em;
-    width: fit-content;
+    width: auto;
 }
 
 .chat-input img{
@@ -182,18 +184,24 @@ button{
    
 } 
 
+.chat-input ::placeholder{
+    font-size: smaller;
+}
+
 .chat-messages ul{
     list-style: none;
-    word-break: break-all;
     line-height: 2em;
+    word-break: break-all;
+
 }
+
 .chat-messages{
     overflow-y: auto;
     height: 80%;
     color : white;
     border : 1px solid #308695;
     padding : 1em;
-
+    max-width: 100%;
 }
 .online-users{
     text-align: center;
@@ -209,4 +217,21 @@ button{
 .joinLeave{
     color : gray;
     font-size: .8em;
+}
+
+@media screen and (max-height : 700px){
+   .chat-room{
+    padding-bottom: 5em;
+   }
+
+}
+
+@media screen and (max-width : 850px) {
+    .container{
+        flex-direction: column;
+    }
+    .left{
+        width: 100%;
+    }
+
 }

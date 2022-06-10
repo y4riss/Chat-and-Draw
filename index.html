@@ -43,71 +43,78 @@
 
         <div class="right">
             
-             <div class="brushes hide">
-            <div class="b rounded brush1 active" onclick="setLineWidth(2,this)"></div>
-            <div class="b rounded brush2" onclick="setLineWidth(1,this)"></div>
-            <div class="b rounded brush3" onclick="setLineWidth(10,this)"></div>
-            <div class="b rounded brush4" onclick="setLineWidth(20,this)"></div>
-            <div class="b rounded eraserImg"onclick="setLineWidth(30,this)"></div>
-        </div>
+            
 
-            <div class="palette hide">
-                <div class="colors">
-                        <div class="color" style="background : #e60000;" onclick="drawingColor('#e60000',this)"></div>
-                        <div class="color" style="background : #ff0000;" onclick="drawingColor('#ff0000',this)"></div>
-                        <div class="color" style="background : #ff3333;" onclick="drawingColor('#ff3333',this)"></div>
-                        <div class="color" style="background : #ff6666;" onclick="drawingColor('#ff6666',this)"></div>
-                        <div class="color" style="background : #ff9999;" onclick="drawingColor('#ff9999',this)"></div>
-
-                        <div class="color" style="background : #e68a00;" onclick="drawingColor('#e68a00',this)"></div>
-                        <div class="color" style="background : #ff9900;" onclick="drawingColor('#ff9900',this)"></div>
-                        <div class="color" style="background : #ffad33;" onclick="drawingColor('#ffad33',this)"></div>
-                        <div class="color" style="background : #ffc266;" onclick="drawingColor('#ffc266',this)"></div>
-                        <div class="color" style="background : #ffd699;" onclick="drawingColor('#ffd699',this)"></div>
-
-                        <div class="color" style="background : #e6e600;" onclick="drawingColor('#e6e600',this)"></div>
-                        <div class="color" style="background : #ffff00;" onclick="drawingColor('#ffff00',this)"></div>
-                        <div class="color" style="background : #ffff33;" onclick="drawingColor('#ffff33',this)"></div>
-                        <div class="color" style="background : #ffff66;" onclick="drawingColor('#ffff66',this)"></div>
-                        <div class="color" style="background : #ffff99;" onclick="drawingColor('#ffff99',this)"></div>
-
-                        <div class="color" style="background : #00e600;" onclick="drawingColor('#00e600',this)"></div>
-                        <div class="color" style="background : #00ff00;" onclick="drawingColor('#00ff00',this)"></div>
-                        <div class="color" style="background : #33ff33;" onclick="drawingColor('#33ff33',this)"></div>
-                        <div class="color" style="background : #66ff66;" onclick="drawingColor('#66ff66',this)"></div>
-                        <div class="color" style="background : #99ff99;" onclick="drawingColor('#99ff99',this)"></div>
-
-                        <div class="color" style="background : #0000b3;" onclick="drawingColor('#0000b3',this)"></div>
-                        <div class="color" style="background : #0000ff;" onclick="drawingColor('#0000ff',this)"></div>
-                        <div class="color" style="background : #3333ff;" onclick="drawingColor('#3333ff',this)"></div>
-                        <div class="color" style="background : #6666ff;" onclick="drawingColor('#6666ff',this)"></div>
-                        <div class="color" style="background : #9999ff;" onclick="drawingColor('#9999ff',this)"></div>
-
-                        <div class="color" style="background : #2d004d;" onclick="drawingColor('#2d004d',this)"></div>
-                        <div class="color" style="background : #4b0082;" onclick="drawingColor('#4b0082',this)"></div>
-                        <div class="color" style="background : #6800b3;" onclick="drawingColor('#6800b3',this)"></div>
-                        <div class="color" style="background : #8600e6;" onclick="drawingColor('#8600e6',this)"></div>
-                        <div class="color" style="background : #9f1aff;" onclick="drawingColor('#9f1aff',this)"></div>
-
-                        <div class="color" style="background : #000000;" onclick="drawingColor('#000000',this)"></div>
-                        <div class="color" style="background : #404040;" onclick="drawingColor('#404040',this)"></div>
-                        <div class="color" style="background : #808080;" onclick="drawingColor('#808080',this)"></div>
-                        <div class="color" style="background : #bfbfbf;" onclick="drawingColor('#bfbfbf',this)"></div>
-                        <div class="color" style="background : #ffffff;" onclick="drawingColor('#ffffff',this)"></div>
-                        
-                </div> 
-                <div class="color customColor" style="background : #ffffff; cursor: default; width: 100%; padding: 1em; " ></div>
-
-                <input id="inputColor" type="text" placeholder="#000000" onchange="handleCustomColor(this)">
-            </div>
+        
 
             <div class="top">
-                <img  class="brush-picker" src="brush.svg" alt="brush-picker">
-                <img class="pick-btn" src="palette.svg" alt="color-picker">
+                <div class="brush-picker-wrap">
+                    <img  class="brush-picker" src="brush.svg" alt="brush-picker">
+                    <div class="brushes hide">
+                        <div class="b rounded brush1 active" onclick="setLineWidth(2,this)"></div>
+                        <div class="b rounded brush2" onclick="setLineWidth(1,this)"></div>
+                        <div class="b rounded brush3" onclick="setLineWidth(10,this)"></div>
+                        <div class="b rounded brush4" onclick="setLineWidth(20,this)"></div>
+                        <div class="b rounded eraserImg"onclick="setLineWidth(30,this)"></div>
+                    </div>
+                </div>
+
+                <div class="color-picker-wrap">
+                    <img class="pick-btn " src="palette.svg" alt="color-picker">
+                    <div class="palette hide">
+                        <div class="colors">
+                                <div class="color" style="background : #e60000;" onclick="drawingColor('#e60000',this)"></div>
+                                <div class="color" style="background : #ff0000;" onclick="drawingColor('#ff0000',this)"></div>
+                                <div class="color" style="background : #ff3333;" onclick="drawingColor('#ff3333',this)"></div>
+                                <div class="color" style="background : #ff6666;" onclick="drawingColor('#ff6666',this)"></div>
+                                <div class="color" style="background : #ff9999;" onclick="drawingColor('#ff9999',this)"></div>
+        
+                                <div class="color" style="background : #e68a00;" onclick="drawingColor('#e68a00',this)"></div>
+                                <div class="color" style="background : #ff9900;" onclick="drawingColor('#ff9900',this)"></div>
+                                <div class="color" style="background : #ffad33;" onclick="drawingColor('#ffad33',this)"></div>
+                                <div class="color" style="background : #ffc266;" onclick="drawingColor('#ffc266',this)"></div>
+                                <div class="color" style="background : #ffd699;" onclick="drawingColor('#ffd699',this)"></div>
+        
+                                <div class="color" style="background : #e6e600;" onclick="drawingColor('#e6e600',this)"></div>
+                                <div class="color" style="background : #ffff00;" onclick="drawingColor('#ffff00',this)"></div>
+                                <div class="color" style="background : #ffff33;" onclick="drawingColor('#ffff33',this)"></div>
+                                <div class="color" style="background : #ffff66;" onclick="drawingColor('#ffff66',this)"></div>
+                                <div class="color" style="background : #ffff99;" onclick="drawingColor('#ffff99',this)"></div>
+        
+                                <div class="color" style="background : #00e600;" onclick="drawingColor('#00e600',this)"></div>
+                                <div class="color" style="background : #00ff00;" onclick="drawingColor('#00ff00',this)"></div>
+                                <div class="color" style="background : #33ff33;" onclick="drawingColor('#33ff33',this)"></div>
+                                <div class="color" style="background : #66ff66;" onclick="drawingColor('#66ff66',this)"></div>
+                                <div class="color" style="background : #99ff99;" onclick="drawingColor('#99ff99',this)"></div>
+        
+                                <div class="color" style="background : #0000b3;" onclick="drawingColor('#0000b3',this)"></div>
+                                <div class="color" style="background : #0000ff;" onclick="drawingColor('#0000ff',this)"></div>
+                                <div class="color" style="background : #3333ff;" onclick="drawingColor('#3333ff',this)"></div>
+                                <div class="color" style="background : #6666ff;" onclick="drawingColor('#6666ff',this)"></div>
+                                <div class="color" style="background : #9999ff;" onclick="drawingColor('#9999ff',this)"></div>
+        
+                                <div class="color" style="background : #2d004d;" onclick="drawingColor('#2d004d',this)"></div>
+                                <div class="color" style="background : #4b0082;" onclick="drawingColor('#4b0082',this)"></div>
+                                <div class="color" style="background : #6800b3;" onclick="drawingColor('#6800b3',this)"></div>
+                                <div class="color" style="background : #8600e6;" onclick="drawingColor('#8600e6',this)"></div>
+                                <div class="color" style="background : #9f1aff;" onclick="drawingColor('#9f1aff',this)"></div>
+        
+                                <div class="color" style="background : #000000;" onclick="drawingColor('#000000',this)"></div>
+                                <div class="color" style="background : #404040;" onclick="drawingColor('#404040',this)"></div>
+                                <div class="color" style="background : #808080;" onclick="drawingColor('#808080',this)"></div>
+                                <div class="color" style="background : #bfbfbf;" onclick="drawingColor('#bfbfbf',this)"></div>
+                                <div class="color" style="background : #ffffff;" onclick="drawingColor('#ffffff',this)"></div>
+                                
+                        </div> 
+                        <div class="color customColor" ></div>
+        
+                        <input id="inputColor" type="text" placeholder="#000000" onchange="handleCustomColor(this)">
+                    </div>
+                </div>
             </div>
 
 
-            <canvas></canvas>
+            <canvas  ></canvas>
           
         </div>
 

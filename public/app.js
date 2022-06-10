@@ -10,7 +10,7 @@ let userList = []
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth / 1.35
-canvas.height = window.innerHeight / 1.2
+canvas.height = window.innerHeight / 1.35
 
 let color = "white"
 let lineWidth = 2
@@ -39,7 +39,7 @@ const handleSubmit = (e)=>{
         document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAA4f8AAAAAAKjP8ADjkPAABLTMALBwugCQs9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERURERERERERVVERERERERM1URERERERMzMUQRERERETMRREEREREREQAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFGYREREREQACZhERERERECIhERERERERIhHH/wAAg/8AAAH/AAAA/wAAAH8AAIA/AADAHwAA4A8AAPAHAAD4AwAA/AEAAP4AAAD/AAAA/4AAAP/AAAD/4AAA),auto";
         login.classList.add("hide");
         container.classList.remove("hide");
-        
+        document.getElementById("chatInput").placeholder = ` ${username}, type your message here...`;
 
         
         }
@@ -129,7 +129,6 @@ const displayMessages = messages =>{
     const chatMessagesDiv = document.querySelector(".chat-messages");
     let className = "user"
     ul.innerHTML = '';
-    console.log(messages)
     messages.map(line =>{
         
         if(line.msg == "has joined the room")  connectionAlert(line.user,"joined") 
@@ -152,7 +151,7 @@ const connectionAlert = (user,action)=>{
         user = "You"
         verbHave = "have"
     }
-     li.textContent = user + " " + verbHave + " "  + action +  " the chat "
+     li.textContent = user + " " + verbHave + " "  + action +  " the room "
     li.classList.add("joinLeave")
     ul.appendChild(li);
 
@@ -227,7 +226,12 @@ let drawing = false // it is set to true when mouse is down , and false when mou
 //the drawing logic goes down here 
 
 canvas.addEventListener("pointerdown",e=>{
-socket.emit('mousedown',{x : e.offsetX , y : e.offsetY , c : color , l : lineWidth}); /* here the client send to the server the coords 
+
+    const  rect = e.target.getBoundingClientRect();
+    let mouseX = e.clientX - rect.left;
+    let mouseY = e.clientY - rect.top;
+
+socket.emit('mousedown',{x : mouseX , y : mouseY , c : color , l : lineWidth}); /* here the client send to the server the coords 
 of where the drawing started , along with the color chosen and the linewidth */
 
 drawing = true
@@ -235,9 +239,12 @@ drawing = true
 
 canvas.addEventListener("pointermove",e=>{
 if(drawing) {
-    socket.emit('userIsDrawing',{x : e.offsetX , y : e.offsetY ,c : color , l : lineWidth})
+    const  rect =  e.target.getBoundingClientRect();
+    let mouseX = e.clientX - rect.left;
+    let mouseY = e.clientY - rect.top;
+    socket.emit('userIsDrawing',{x : mouseX , y : mouseY ,c : color , l : lineWidth})
     /* here the client keeps sending the coords of the mouse until the mouse is up */
-    startDrawing(e.offsetX, e.offsetY,color,lineWidth)
+    startDrawing(mouseX,mouseY,color,lineWidth)
 
 }
 })
