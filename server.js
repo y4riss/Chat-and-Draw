@@ -17,9 +17,6 @@ app.get('/',(req,res)=>{
     res.sendFile(__dirname+'/index.html')
 })
 
-
-let lines = [] // each element is an array that has the line that has been drawing up until now
-let lineCoords = [] // holds the info about a line in the board ( x , y , width , color)
 let inactivity = 0 // if  inactivity reaches 30 : clear the white board
 let mouseUP = false
 let boardCleared = false
@@ -27,49 +24,87 @@ const MAX_SECONDS_WITHOUT_DRAWING = 20
 
 
 let userList =[] // keep track of the users
-let messages = []
+
+
+let rooms = []
 
 io.on('connection',socket=>{
-    
-    // addUser event is sent by a user when submitting its username 
-    // the function takes the user , create an object with socket id as the user id , and username as what the user provided
-    // the object gets pushed to the userList , and the userList is sent to every client to get rendered to the DOM
 
-       
-         // when a user get added , the server sends to that user the informations about the
-        // current board ( the lines that had been drawn up until now , and they get rendered)
+    io.emit("allUsers",userList)
 
+
+    //when user submit his username
     socket.on("joined",username=>{
 
         userList.push({
             id : socket.id,
-            user : username,
+            name : username,
         })
-
-        messages.push({
-            user : username,
-            msg : "has joined the room"
-        })
-        
-        io.emit('userNumber',userList.length) // send the number of users
-        socket.broadcast.emit('joined',username) // send to the others that user x has joined 
-        socket.emit('renderPreviousDrawings',lines) // render to that user the previous drawings
-        socket.emit('renderPreviousMessages',messages) // render to that user the previous messages.
+        io.emit("renderRooms",rooms)
+        io.emit("allUsers",userList)
+                
     })
 
 
-    socket.on('sendMessage',data=>{
-        messages.push(data)
-        io.emit('sendMessage',messages)
+    //when a user creates a room
+    socket.on("new room",(roomname,username) =>{
+
+        rooms.push({
+            host : username,
+            name : roomname,
+            current_users : [],
+            messages : [],
+            lines : [],
+            lineCoords : [],
+        })
+        io.emit("renderRooms",rooms)
+
     })
 
 
+
+    // when a user joins a room
+    socket.on("user joins room",(username,roomname)=>{
+
+           
+            socket.join(roomname)
+            addUserToRoom(username,roomname)
+            
+            const joinMsg = {
+                owner : username,
+                msg : "has joined"
+            }
+
+            const room = addMessagesToRoom(getRoom(socket.id),joinMsg)
+
+            io.to(roomname).emit('joined',username) // send to the others that belong to room r that user x has joined 
+            io.to(roomname).emit('renderPreviousDrawings',room.lines) // render to that user the previous drawings
+            io.to(roomname).emit('renderPreviousMessages',room.messages) // render to that user the previous messages.
+
+    })
+
+
+    // when a user sends a message
+    socket.on('sendMessage',msg=>{
+
+        const room = addMessagesToRoom(getRoom(socket.id),msg)
+        io.to(room.name).emit('sendMessage',room.messages)
+    })
+
+
+
+
+    //when a user is drawing
     socket.on('userIsDrawing',data=>{
+
         inactivity = 0
-        lineCoords.push(data) // and these are the rest of the coords along with the color and width
-        socket.broadcast.emit('userIsDrawing',data)
+        let room = addLineCoordsToRoom(getRoom(socket.id),data)
+        socket.to(room.name).emit('userIsDrawing',data)
     })
 
+
+
+    // when a user stops drawing
     socket.on('mouseup',()=>{
         //when the user finishes drawing , this function fires , it addes the line to the lines array , and reset the line array
         mouseUP = true
@@ -77,78 +112,191 @@ io.on('connection',socket=>{
             mouseUP =false
             boardCleared = false
         }
-        checkInactivity()
-        lines.push(lineCoords)
-        lineCoords = []
+        // checkInactivity()
+        
+        let room = getRoom(socket.id)
+        room = addLinesToRoom(room,room.lineCoords)
+        room = addLineCoordsToRoom(room,[])
 
     })
+
     
-    // when a user disconnect , it gets removed from the userList
-    // and then we reRender the userList with the new UserList
+    
+    //when a user disconnect
     socket.on('disconnect',()=>{
+        
         let username
+        let room = getRoom(socket.id)
          userList.map(u => {
             if(u.id == socket.id ){
-                username = u.user
+                username = u.name
                 return
             }
         })
+        if(room){
+            if(username != "" && username != undefined){
+
+                const leftmsg = {
+                    owner : username,
+                    msg : "has left"
+                }
+                room = addMessagesToRoom(getRoom(socket.id),leftmsg)
+                room = removeDisconnectedUserFromRoom(room,username)
+                if(roomIsEmpty(room.name)) delete_room((room.name))
+                io.emit("renderRooms",rooms)
+                io.to(room.name).emit('left',username)     
+            // io.emit('onlineUsers',userList,[])
+            }
+        }
+
         userList = userList.filter(user => user.id != socket.id)
-        if(username != "" && username != undefined){
-            messages.push({
-                user : username,
-                msg : "has left the room"
-            })
-            socket.broadcast.emit('left',username) // send to the others that user x has joined \
-            io.emit('userNumber',userList.length)
+        io.emit("allUsers",userList)
 
-        }
-      
-        
-
-        if(userList.length == 0)   
-        {
-            lineCoords = []
-            lines = []
-            messages = []
-        }
+        if(userList.length == 0)   rooms = []
 
     })
-
-
-
 })
 
 
+const removeDisconnectedUserFromRoom = (r,username)=>{
 
-const  sleep = ms => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  
-const checkInactivity = async ()=>{
-    while(true){
-        if(mouseUP){
-            mouseUP = false
-            break
+    let ROOM
+    rooms.forEach(room =>{
+        if(room.name === r.name){
+            room.current_users =  room.current_users.filter(user => user != username)
+            ROOM = room
+            return;
         }
-        await sleep(1000)
-
-        if(inactivity === MAX_SECONDS_WITHOUT_DRAWING ) {
-            io.emit('clearBoard')
-            lineCoords = []
-            lines = []
-            io.emit('renderPreviousDrawings',lines)
-            boardCleared = true
-            inactivity = 0
-            break
-        }
-
-        inactivity++
-
-    }
+    })
+    return ROOM
 }
 
-checkInactivity()
+const addLineCoordsToRoom = (r,lineCoords)=>{
+
+    let ROOM
+    rooms.forEach(room =>{
+        if(room.name === r.name){
+            room.lineCoords.push(lineCoords)
+            ROOM = room
+            return
+        }
+    })
+    return ROOM
+}
+
+const addLinesToRoom = (r,line)=>{
+
+    let ROOM
+    rooms.forEach(room =>{
+        if(room.name === r.name){
+            room.lines.push(line)
+            ROOM = room
+            return
+        }
+    })
+    return ROOM
+}
+
+const addMessagesToRoom = (r,message)=>{
+
+    let ROOM 
+    rooms.forEach(room =>{
+        if(room.name === r.name){
+            room.messages.push(message)
+            ROOM = room
+            return
+        }
+    })
+    return ROOM
+    
+
+}
+
+const addUserToRoom = (username,roomname)=>{
+
+        rooms.forEach(room =>{
+            if(room.name === roomname){
+                room.current_users.push(username);
+                return;
+            }
+        })
+}
+
+const roomIsEmpty = (roomname)=>{
+
+    let empty = false
+    rooms.map(room =>{
+        if(room.name === roomname){
+            empty = (room.current_users.length == 0)
+            return;
+        }
+    })
+    return empty;
+}
+
+// const delete_user = (id)=>{
+
+//     let newUserList = []
+//     userList.map(user=>{
+//         if(user.id != id ) newUserList.push(user)
+//     })
+//     return newUserList
+// }
+
+const delete_room = (roomname)=>{
+    let newRooms = []
+    rooms.map(room =>{
+        if(room.name != roomname) newRooms.push(room)
+    })
+    rooms = newRooms
+}
+const getRoom = (id)=>{
+
+    let username = ""
+    userList.forEach(user =>{
+        if(user.id === id){
+            username = user.name
+            return;
+        }
+    })
+    let r = null
+    rooms.forEach(room =>{
+        if(room.current_users.includes(username)){
+            r = room
+            return;
+        }
+    })
+    return r
+}
+
+// const  sleep = ms => {
+//     return new Promise(resolve => setTimeout(resolve, ms));
+//   }
+  
+// const checkInactivity = async ()=>{
+//     while(true){
+//         if(mouseUP){
+//             mouseUP = false
+//             break
+//         }
+//         await sleep(1000)
+
+//         if(inactivity === MAX_SECONDS_WITHOUT_DRAWING ) {
+//             io.emit('clearBoard')
+//             lineCoords = []
+//             lines = []
+//             io.emit('renderPreviousDrawings',lines)
+//             boardCleared = true
+//             inactivity = 0
+//             break
+//         }
+
+//         inactivity++
+
+//     }
+// }
+
+// checkInactivity()
 
 const PORT = process.env.PORT || 3000
 

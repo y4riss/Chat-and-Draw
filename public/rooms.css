@@ -1,0 +1,16 @@
+
+.rooms {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color : white;
+    background : rgb(255, 97, 97);
+    height: 100vh;
+    gap: 2em;
+
+}
+
+.form{
+
+}

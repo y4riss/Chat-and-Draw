@@ -1,11 +1,15 @@
 const socket = io();
 
-const input = document.querySelector("input");
-const container = document.querySelector(".container")
-const login = document.querySelector(".login")
+const userInput = document.querySelector("#userInput");
+const container = document.querySelector(".container");
+const login = document.querySelector(".login");
+const roomsPage = document.querySelector(".rooms");
+const roomInput = document.querySelector("#createRoom");
+const emptyString = /^\s*$/
+
 let username = ""
 let userList = []
-
+let rooms = []
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -24,27 +28,42 @@ ctx.lineWidth = lineWidth;
 // this function is fired when the user enters his username
 // if username is valid ( not empty , doesnt already exist) , it gets added to userList by sending it to the server
 // and the drawing page gets shown
-const handleSubmit = (e)=>{
+const handle_username = e=>{
+        console.log(userList)
         e.preventDefault()
-        const emptyUser = /^\s*$/
-        username = input.value
-        const found = userList.some(user => user.username === username);
+        username = userInput.value.trim()
+        const found = userList.some(user => user.name === username);
         if(found){
             alert("username already exists")
         }
-        else if(username.match(emptyUser)) alert("username must not be empty")
+        else if(username.match(emptyString)) alert("username must not be empty")
         else{
+            socket.emit('joined',username);
+            login.classList.add("hide");
+            roomsPage.classList.remove("hide");
+            //document.getElementById("chatInput").placeholder = ` ${username}, type your message here...`;
+        }
+        userInput.value = ""
+}
+
+const handle_roomname = e=>{
+
+    e.preventDefault()
+    roomname = roomInput.value
+    if(rooms.some(room => room.name === roomname)){
+        alert("room already exists")
+    }
+    else if(roomname.match(emptyString)) alert("room name must not be empty")
+    else{
+        socket.emit("new room",roomname,username)
+        socket.emit("user joins room",username,roomname)
         connectionAlert(username,"joined")
-        socket.emit('joined',username);
         document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAA4f8AAAAAAKjP8ADjkPAABLTMALBwugCQs9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERURERERERERVVERERERERM1URERERERMzMUQRERERETMRREEREREREQAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFGYREREREQACZhERERERECIhERERERERIhHH/wAAg/8AAAH/AAAA/wAAAH8AAIA/AADAHwAA4A8AAPAHAAD4AwAA/AEAAP4AAAD/AAAA/4AAAP/AAAD/4AAA),auto";
-        login.classList.add("hide");
+        roomsPage.classList.add("hide");
         container.classList.remove("hide");
         document.getElementById("chatInput").placeholder = ` ${username}, type your message here...`;
-
-        
-        }
-
-        input.value = ""
+    }
+    roomInput.value = ""
 }
 
 const handleCustomColor = input =>{
@@ -120,48 +139,52 @@ const sendMessage = () =>{
 
     inputMessage.value = ""
  
-    if(!message.match(/^\s*$/))
-    socket.emit('sendMessage',{user : username , msg : message})
+    if(!message.match(emptyString))
+    socket.emit('sendMessage',{owner : username , msg : message})
     
 }
 const displayMessages = messages =>{
-    const ul = document.querySelector("ul");
+    const ul = document.querySelector(".message-list");
     const chatMessagesDiv = document.querySelector(".chat-messages");
     let className = "user"
     ul.innerHTML = '';
     messages.map(line =>{
         
-        if(line.msg == "has joined the room")  connectionAlert(line.user,"joined") 
-        else if(line.msg == "has left the room") connectionAlert(line.user,"left") 
+        if(line.msg == "has joined")  connectionAlert(line.owner,"joined") 
+        else if(line.msg == "has left") connectionAlert(line.owner,"left") 
         else{
-            if(username == line.user) className = "currentUser"
+            if(username == line.owner) className = "currentUser"
             else className = "user"
             const li = document.createElement("li");
-            li.innerHTML = `<strong class="${className}"> ${line.user}</strong> : ${line.msg}`  ;
+            li.innerHTML = `<strong class="${className}"> ${line.owner}</strong> : ${line.msg}`  ;
             ul.appendChild(li);
         }
     })
     chatMessagesDiv.scrollTo(0, chatMessagesDiv.scrollHeight);
 }
 const connectionAlert = (user,action)=>{
-    const ul = document.querySelector("ul");
+    const ul = document.querySelector(".message-list");
     const li = document.createElement("li");
     let verbHave = "has"
     if(user == username) {
         user = "You"
         verbHave = "have"
     }
-     li.textContent = user + " " + verbHave + " "  + action +  " the room "
+     li.textContent = user + " " + verbHave + " "  + action;
     li.classList.add("joinLeave")
     ul.appendChild(li);
 
 }
 /* ______________________________________________________SOCKETS______________________________________________*/
 
+socket.on("allUsers",users=>{
+    userList = users
+})
 
-socket.on('userNumber',number=>{
+socket.on('onlineUsers',users=>{
+
     const onlineUsers = document.querySelector(".online-users");
-    onlineUsers.textContent = `( Online users : ${number} )`
+    onlineUsers.textContent = `( Online users : ${users.length} )`
 })
 
 socket.on('sendMessage',messages=>{
@@ -186,8 +209,32 @@ const startDrawing = (x,y,c,l)=>{
     ctx.fill();
 }
 
+
 // mousedown and mousemove events are sent by the server to all clients , to update the screen in real time
 
+socket.on("renderRooms",allRooms=>{
+    console.log(allRooms)
+    rooms = allRooms
+    const ul = document.querySelector(".available-rooms")
+    ul.innerHTML = ""
+    allRooms.map(room =>{
+
+        const li = document.createElement("li")
+        const joinButton = document.createElement("button")
+        li.textContent = ` ${room.name}  ( ${room.host} )`
+        joinButton.innerText = "Join room" 
+        li.appendChild(joinButton)
+        ul.appendChild(li)
+        joinButton.addEventListener("click",()=>{
+        socket.emit("user joins room",username,room.name)
+        connectionAlert(username,"joined")
+        document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAA4f8AAAAAAKjP8ADjkPAABLTMALBwugCQs9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERURERERERERVVERERERERM1URERERERMzMUQRERERETMRREEREREREQAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFGYREREREQACZhERERERECIhERERERERIhHH/wAAg/8AAAH/AAAA/wAAAH8AAIA/AADAHwAA4A8AAPAHAAD4AwAA/AEAAP4AAAD/AAAA/4AAAP/AAAD/4AAA),auto";
+        roomsPage.classList.add("hide");
+        container.classList.remove("hide");
+        document.getElementById("chatInput").placeholder = ` ${username}, type your message here...`;
+        })
+    })
+})
 
 socket.on('userIsDrawing',data=>{
    
@@ -201,17 +248,13 @@ socket.on('userIsDrawing',data=>{
 socket.on('renderPreviousDrawings',lines =>{
     lines.map(lineCoords =>{
             for(let i = 0 ; i < lineCoords.length ; i++){
-
              startDrawing(lineCoords[i].x,lineCoords[i].y,lineCoords[i].c,lineCoords[i].l)
             }
     })
 })
 
 socket.on('renderPreviousMessages',messages=>{
-
-
         displayMessages(messages)
-
 })
 
 socket.on('clearBoard',()=>{
