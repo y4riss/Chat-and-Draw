@@ -163,7 +163,6 @@ io.on('connection',socket=>{
                 room = removeDisconnectedUserFromRoom(room,username)
                 if(roomIsEmpty(room.name)) delete_room((room.name))
                 io.emit("renderRooms",rooms)
-                console.log(rooms)
                 io.to(room.name).emit('left',username)   
                 io.to(room.name).emit("onlineUsers",room)
   

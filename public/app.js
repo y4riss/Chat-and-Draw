@@ -30,7 +30,6 @@ ctx.lineWidth = lineWidth;
 // if username is valid ( not empty , doesnt already exist) , it gets added to userList by sending it to the server
 // and the drawing page gets shown
 const handle_username = e=>{
-        console.log(userList)
         e.preventDefault()
         username = userInput.value.trim()
         const found = userList.some(user => user.name === username);
@@ -312,7 +311,6 @@ const startDrawing = (x,y,c,l)=>{
 // mousedown and mousemove events are sent by the server to all clients , to update the screen in real time
 
 socket.on("renderRooms",allRooms=>{
-    console.log(allRooms)
     rooms = allRooms
     const ul = document.querySelector(".available-rooms")
     ul.innerHTML = ""
@@ -331,7 +329,6 @@ socket.on("renderRooms",allRooms=>{
                 }
                 else if(room.privacy.private === true){
                     const enterKeyPage = document.querySelector(".enterKey")
-                    console.log(enterKeyPage)
                     enterKeyPage.classList.add("show")
                     currentRoom = room
                 }
