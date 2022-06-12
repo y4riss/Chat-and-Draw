@@ -291,34 +291,6 @@ const getRoom = (id)=>{
     return r
 }
 
-// const  sleep = ms => {
-//     return new Promise(resolve => setTimeout(resolve, ms));
-//   }
-  
-// const checkInactivity = async ()=>{
-//     while(true){
-//         if(mouseUP){
-//             mouseUP = false
-//             break
-//         }
-//         await sleep(1000)
-
-//         if(inactivity === MAX_SECONDS_WITHOUT_DRAWING ) {
-//             io.emit('clearBoard')
-//             lineCoords = []
-//             lines = []
-//             io.emit('renderPreviousDrawings',lines)
-//             boardCleared = true
-//             inactivity = 0
-//             break
-//         }
-
-//         inactivity++
-
-//     }
-// }
-
-// checkInactivity()
 
 
 

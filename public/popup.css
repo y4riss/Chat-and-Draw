@@ -1,4 +1,4 @@
-.popup,.popupOfKey,.enterKey{
+.popup,.popupOfKey,.enterKey,.loading{
     width: 100%;
     height: 100vh;
     background: #000000c7;
@@ -70,3 +70,26 @@
     padding-right: 2em;
     width: 100%;
 }
+
+.loading{
+    align-items: center;
+    background: #151515;
+    cursor: default;
+}
+.spin{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 6px solid #308695;
+    border-color: #308695 transparent #308695 transparent;
+    animation: spinning 1.2s linear infinite;
+}
+
+@keyframes spinning {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }

@@ -42,6 +42,7 @@ const handle_username = e=>{
         }
         else{
             socket.emit('joined',username);
+            loadingScreen()
             login.classList.add("hide");
             roomsPage.classList.remove("hide");
             //document.getElementById("chatInput").placeholder = ` ${username}, type your message here...`;
@@ -74,6 +75,7 @@ const handle_roomname = e=>{
                     key : null
                 }
                 socket.emit("new room",roomname,username,privacy)
+                loadingScreen()
                 enterRoom(roomname)
                 popup.classList.remove("show")
             }
@@ -237,6 +239,7 @@ const connectionAlert = (user,action)=>{
 
 const enterRoom = (roomname)=>{
     socket.emit("user joins room",username,roomname)
+    loadingScreen()
     connectionAlert(username,"joined")
     document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAA4f8AAAAAAKjP8ADjkPAABLTMALBwugCQs9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERURERERERERVVERERERERM1URERERERMzMUQRERERETMRREEREREREQAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFGYREREREQACZhERERERECIhERERERERIhHH/wAAg/8AAAH/AAAA/wAAAH8AAIA/AADAHwAA4A8AAPAHAAD4AwAA/AEAAP4AAAD/AAAA/4AAAP/AAAD/4AAA),auto";
     roomsPage.classList.add("hide");
@@ -421,3 +424,17 @@ const ascii_to_hex = str =>{
 	 }
 	return arr1.join('');
 }
+
+
+const  sleep = ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+const loadingScreen = async ()=>{
+        const loadingPage = document.querySelector(".loading")
+        loadingPage.classList.add("show")
+        await sleep(1000)
+        loadingPage.classList.remove("show")
+}
+
+
