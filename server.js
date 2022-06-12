@@ -98,7 +98,12 @@ io.on('connection',socket=>{
     socket.on('sendMessage',msg=>{
 
         const room = addMessagesToRoom(getRoom(socket.id),msg)
-        io.to(room.name).emit('sendMessage',room.messages)
+        try{
+            io.to(room.name).emit('sendMessage',room.messages)
+        }
+        catch (error){
+            socket.emit("reload")
+        }
     })
 
 
@@ -109,7 +114,11 @@ io.on('connection',socket=>{
 
         inactivity = 0
         let room = addLineCoordsToRoom(getRoom(socket.id),data)
-        socket.to(room.name).emit('userIsDrawing',data)
+        try{
+            socket.to(room.name).emit('userIsDrawing',data)
+        }catch (error){
+            socket.emit("reload")
+        }
     })
 
 

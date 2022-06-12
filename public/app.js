@@ -54,52 +54,61 @@ const handle_roomname = e=>{
 
     e.preventDefault()
     roomname = roomInput.value
-    if(rooms.some(room => room.name === roomname)){
-        alert("room already exists")
-    }
-    else if(roomname.match(emptyString)) alert("room name must not be empty")
-    else if(roomname.length > 10){
-        alert("room name must be under 10 characters")
-    }
-    else{
-        const popup = document.querySelector(".popup")
-        popup.classList.add("show")
-        roomInput.disabled = true
-        document.getElementById("publicBtn").onclick = ()=>{
-            const privacy = {
-                private : false,
-                key : null
-            }
-            socket.emit("new room",roomname,username,privacy)
-            enterRoom(roomname)
-            popup.classList.remove("show")
+    try{
+        if(rooms.some(room => room.name === roomname)){
+            alert("room already exists")
         }
-        document.getElementById("privateBtn").onclick = ()=>{
-            let key = shuffle(ascii_to_hex(username+roomname).split("")).join("")
-            while(key.length < 10){
-                key +=  (Math.floor(Math.random() * 9)+"");
+        else if(!username){
+            location.reload();
+        }
+        else if(roomname.match(emptyString)) alert("room name must not be empty")
+        else if(roomname.length > 10){
+            alert("room name must be under 10 characters")
+        }
+        else{
+            const popup = document.querySelector(".popup")
+            popup.classList.add("show")
+            roomInput.disabled = true
+            document.getElementById("publicBtn").onclick = ()=>{
+                const privacy = {
+                    private : false,
+                    key : null
+                }
+                socket.emit("new room",roomname,username,privacy)
+                enterRoom(roomname)
+                popup.classList.remove("show")
             }
-            const privacy = {
-                private : true,
-                key : key
-            }
-            const popupOfKey = document.querySelector(".popupOfKey")
-            const p = document.createElement("p")
-            const img = document.createElement("img")
-            img.src = "x.svg"
-            p.innerHTML= `Your key is : <strong> ${key} </strong>, share it with your friends to join the room`
-            p.appendChild(img)
-            popupOfKey.appendChild(p)
-            popupOfKey.classList.add("show")
-            socket.emit("new room",roomname,username,privacy)
-            enterRoom(roomname)
-            popup.classList.remove("show")
-            img.onclick = ()=>{
-                popupOfKey.classList.remove("show")
-                showKeyInChat(key)
+            document.getElementById("privateBtn").onclick = ()=>{
+                let key = shuffle(ascii_to_hex(username+roomname).split("")).join("")
+                while(key.length < 10){
+                    key +=  (Math.floor(Math.random() * 9)+"");
+                }
+                const privacy = {
+                    private : true,
+                    key : key
+                }
+                const popupOfKey = document.querySelector(".popupOfKey")
+                const p = document.createElement("p")
+                const img = document.createElement("img")
+                img.src = "x.svg"
+                p.innerHTML= `Your key is : <strong> ${key} </strong>, share it with your friends to join the room`
+                p.appendChild(img)
+                popupOfKey.appendChild(p)
+                popupOfKey.classList.add("show")
+                socket.emit("new room",roomname,username,privacy)
+                enterRoom(roomname)
+                popup.classList.remove("show")
+                img.onclick = ()=>{
+                    popupOfKey.classList.remove("show")
+                    showKeyInChat(key)
+                }
             }
         }
     }
+    catch(e){
+        location.reload();
+    }
+
     roomInput.value = ""
 }
 
@@ -240,7 +249,7 @@ const handleRoomKey = (e)=>{
     e.preventDefault()
 
     const inputKey = document.getElementById("inputKey")
-
+try{
     if(inputKey.value.trim() === currentRoom.privacy.key) {
         const enterKeyPage = document.querySelector(".enterKey")
         enterKeyPage.classList.remove("show")
@@ -249,11 +258,19 @@ const handleRoomKey = (e)=>{
     else{
         alert("invalid key")
     }
+}
+catch (error){
+    location.reload();
+}
+
     inputKey.value = ""
 
 }
 /* ______________________________________________________SOCKETS______________________________________________*/
 
+socket.on("reload",()=>{
+    location.reload()
+})
 socket.on("allUsers",users=>{
     userList = users
     const allUsers = document.querySelector(".allUsers")
