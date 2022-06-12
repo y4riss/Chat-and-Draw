@@ -116,7 +116,7 @@ canvas{
 }
 .login ::placeholder{
     font-size: .5em;
-    color : white;
+    color : rgba(255, 255, 255, 0.571);
 }
 button{
     width : 100%;
@@ -144,13 +144,15 @@ button{
     font-size: 1em;
     background: #151515;
     border: 1px solid #308695;
-    color: white;
+    color: #f9dce1;
     padding: 1em;
     padding-right: 2em;
     width: 100%;
 }
 
-
+.left strong{
+    color: #b966f4;
+}
 .chat-title{
     font-size: 1.5em;
     text-align: center;
@@ -195,7 +197,10 @@ button{
     word-break: break-all;
 
 }
-
+.chat-messages p{
+    font-size: smaller;
+    color: rebeccapurple;
+}
 .chat-messages{
     overflow-y: auto;
     height: 80%;
@@ -214,6 +219,7 @@ button{
 }
 .currentUser{
     color : red;
+    font-weight: bolder;
 }
 .joinLeave{
     color : gray;

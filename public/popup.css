@@ -12,7 +12,7 @@
     align-items: center;
 }
 .popupOfKey p{
-    background: white;
+    background: #f9dce1;
     padding: 1em;
     position: relative;
     cursor: pointer;
@@ -36,13 +36,13 @@
 .choice img{
     top : -6px;
     right: 0;
-    background: white;
+    background: #f9dce1;
 }
 .choice button:hover{
     background : #2c7480;
 }
 .popup h4{
-    color : white;
+    color : #f9dce1;
     font-weight: bolder;
 }
 .show{
@@ -53,7 +53,7 @@
 .enterKey form{
     background : #308695;
     position : relative;
-    color : white;
+    color : #f9dce1;
     padding: 1em;
     gap: .5em;
     border-radius: 4px;
@@ -65,7 +65,7 @@
     font-size: 1em;
     background: #151515;
     border: 1px solid #308695;
-    color: white;
+    color: #f9dce1;
     padding: 1em;
     padding-right: 2em;
     width: 100%;

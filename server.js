@@ -52,7 +52,7 @@ io.on('connection',socket=>{
         rooms.push({
             host : username,
             name : roomname,
-            current_users : [],
+            current_users : [username],
             messages : [],
             lines : [],
             lineCoords : [],
@@ -69,7 +69,15 @@ io.on('connection',socket=>{
 
            
             socket.join(roomname)
-            addUserToRoom(username,roomname)
+            rooms.forEach(room => {
+                if(room.name === roomname){
+                    if(room.host != username){
+                        addUserToRoom(username,roomname)
+                    }
+                    else return;
+                }
+            })
+
             const joinMsg = {
                 owner : username,
                 msg : "has joined"
@@ -77,6 +85,8 @@ io.on('connection',socket=>{
 
             const room = addMessagesToRoom(getRoom(socket.id),joinMsg)
 
+            io.emit("renderRooms",rooms)
+            io.to(roomname).emit("onlineUsers",room)
             io.to(roomname).emit('joined',username) // send to the others that belong to room r that user x has joined 
             io.to(roomname).emit('renderPreviousDrawings',room.lines) // render to that user the previous drawings
             io.to(roomname).emit('renderPreviousMessages',room.messages) // render to that user the previous messages.
@@ -144,13 +154,17 @@ io.on('connection',socket=>{
                 room = removeDisconnectedUserFromRoom(room,username)
                 if(roomIsEmpty(room.name)) delete_room((room.name))
                 io.emit("renderRooms",rooms)
-                io.to(room.name).emit('left',username)     
+                console.log(rooms)
+                io.to(room.name).emit('left',username)   
+                io.to(room.name).emit("onlineUsers",room)
+  
             // io.emit('onlineUsers',userList,[])
             }
         }
 
         userList = userList.filter(user => user.id != socket.id)
         io.emit("allUsers",userList)
+
 
         if(userList.length == 0)   rooms = []
 
@@ -297,6 +311,8 @@ const getRoom = (id)=>{
 // }
 
 // checkInactivity()
+
+
 
 const PORT = process.env.PORT || 3000
 

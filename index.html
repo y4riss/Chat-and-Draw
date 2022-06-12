@@ -19,18 +19,22 @@
         <p class="title">Welcome to joeDraw app !</p>
         <form action="" onsubmit="handle_username(event)">
             <input type="text" id="userInput" placeholder="Enter a username..." autocomplete="off"><br><br>
-            <button type="submit">Join room</button>
+            <button type="submit">Join</button>
             
         </form>
     </div>
     <div class="rooms hide">
+            <p class="allUsers" style="position: absolute;top: 2%;"></p>
             <h2>List of available rooms : </h2>
             <ul class="available-rooms">
             </ul>
 
             <form action="" onsubmit="handle_roomname(event)">
             <p>Create your own room : </p>
+            <div style="display: flex; gap : .5em;">
             <input type="text" id="createRoom" autocomplete="off">
+            <button type="submit">Create</button>
+            </div>
             </form>
     </div>
 
@@ -57,11 +61,10 @@
             </form>
     </div>
 
-
     <div class="container hide">
         <div class="left">
                 <div class="chat-room">
-                    <p class="chat-title">Welcome to the chat-room</p>
+                    <p class="chat-title"></p>
                         <p class="online-users"></p>
 
                     <div class="chat-messages">

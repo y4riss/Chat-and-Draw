@@ -4,7 +4,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color : white;
+    color : #f9dce1;
     background : #151515;
     height: 100vh;
     gap: 2em;
@@ -37,10 +37,11 @@
     font-size: 1em;
     background: #151515;
     border: 1px solid #308695;
-    color: white;
+    color: #f9dce1;
     padding: 1em;
     padding-right: 2em;
     width: 100%;
+    text-align: center;
 }
 /* width */
 .rooms ::-webkit-scrollbar {

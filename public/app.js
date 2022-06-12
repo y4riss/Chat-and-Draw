@@ -87,7 +87,7 @@ const handle_roomname = e=>{
             const p = document.createElement("p")
             const img = document.createElement("img")
             img.src = "x.svg"
-            p.innerText = `Your key is : ${key} , share it with your friends to join the room`
+            p.innerHTML= `Your key is : <strong> ${key} </strong>, share it with your friends to join the room`
             p.appendChild(img)
             popupOfKey.appendChild(p)
             popupOfKey.classList.add("show")
@@ -96,10 +96,19 @@ const handle_roomname = e=>{
             popup.classList.remove("show")
             img.onclick = ()=>{
                 popupOfKey.classList.remove("show")
+                showKeyInChat(key)
             }
         }
     }
     roomInput.value = ""
+}
+
+const showKeyInChat = key =>{
+    const div = document.querySelector(".chat-messages")
+    const ul = document.querySelector(".message-list")
+    const p = document.createElement("p")
+    p.innerHTML = `Your key is : <strong> ${key} </strong>, share it with your friends to join the room`
+    div.insertBefore(p,ul)
 }
 
 const handleCustomColor = input =>{
@@ -192,7 +201,13 @@ const displayMessages = messages =>{
             if(username == line.owner) className = "currentUser"
             else className = "user"
             const li = document.createElement("li");
-            li.innerHTML = `<strong class="${className}"> ${line.owner}</strong> : ${line.msg}`  ;
+            const span = document.createElement("span")
+            const span2 = document.createElement("span")
+            span.classList.add(`${className}`)
+            span.textContent = `${line.owner}`
+            span2.textContent = ` : ${line.msg}`
+            li.appendChild(span)
+            li.appendChild(span2)
             ul.appendChild(li);
         }
     })
@@ -241,13 +256,18 @@ const handleRoomKey = (e)=>{
 
 socket.on("allUsers",users=>{
     userList = users
+    const allUsers = document.querySelector(".allUsers")
+    allUsers.textContent = `Current users : ${userList.length}`
 })
 
-socket.on('onlineUsers',users=>{
-
-    const onlineUsers = document.querySelector(".online-users");
-    onlineUsers.textContent = `( Online users : ${users.length} )`
+socket.on("onlineUsers",room=>{
+    currentRoom = room
+    const onlineUsers = document.querySelector(".online-users")
+    const welcomeMessage = document.querySelector(".chat-title")
+    onlineUsers.textContent = `Online users : ${room.current_users.length}`
+    welcomeMessage.textContent = `Welcome to ${room.name}`
 })
+
 
 socket.on('sendMessage',messages=>{
 
@@ -284,12 +304,15 @@ socket.on("renderRooms",allRooms=>{
 
             const li = document.createElement("li")
             const joinButton = document.createElement("button")
-            li.textContent = ` ${room.name}  ( ${room.host} )`
+            li.textContent = ` ${room.name}  ( ${room.host} ) - ${room.current_users.length} / 5 spots`
             joinButton.innerText = `Join room ( ${room.privacy.private ? 'private' : 'public' })` 
             li.appendChild(joinButton)
             ul.appendChild(li)
             joinButton.addEventListener("click",()=>{
-                if(room.privacy.private === true){
+                if(room.current_users.length >= 5 ){
+                   alert("You cannot join this room - room is full (5/5)")
+                }
+                else if(room.privacy.private === true){
                     const enterKeyPage = document.querySelector(".enterKey")
                     console.log(enterKeyPage)
                     enterKeyPage.classList.add("show")
