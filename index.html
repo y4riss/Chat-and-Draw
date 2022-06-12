@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/paletteStyle.css"> 
     <link rel="stylesheet" href="/brushStyle.css"> 
     <link rel="stylesheet" href="/rooms.css"> 
-
+    <link rel="stylesheet" href="/popup.css">
 
     <title>joeDraw App</title>
 
@@ -18,24 +18,46 @@
     <div class="login ">
         <p class="title">Welcome to joeDraw app !</p>
         <form action="" onsubmit="handle_username(event)">
-            <input type="text" id="userInput" placeholder="Enter a username to join the room..." autocomplete="off"><br><br>
+            <input type="text" id="userInput" placeholder="Enter a username..." autocomplete="off"><br><br>
             <button type="submit">Join room</button>
             
         </form>
     </div>
     <div class="rooms hide">
-
-
             <h2>List of available rooms : </h2>
-            <ul class="available-rooms"></ul>
+            <ul class="available-rooms">
+            </ul>
 
             <form action="" onsubmit="handle_roomname(event)">
             <p>Create your own room : </p>
             <input type="text" id="createRoom" autocomplete="off">
             </form>
-
-
     </div>
+
+    <div class="popup ">
+            <div class="choice">
+                <h4>Choose your room privacy : </h4>
+                    <button id="publicBtn" >Public room</button>
+                    <button id="privateBtn">Private room</button>
+                    <img src="x.svg" alt="" class="cancelCreation">
+
+            </div>
+    </div>
+
+    <div class="popupOfKey">
+            <div id="key">
+            </div>
+    </div>
+
+    <div class="enterKey ">
+            <form action="" onsubmit="handleRoomKey(event)">
+                <p>enter the room key to join</p>
+                <input type="text" id="inputKey" autocomplete="off">
+                <img src="x.svg" alt="" class="cancelRoomChoice">
+            </form>
+    </div>
+
+
     <div class="container hide">
         <div class="left">
                 <div class="chat-room">
@@ -143,7 +165,18 @@
 
         const colorPicker = document.querySelector(".pick-btn")
         const brushPicker = document.querySelector('.brush-picker')
+        const cancelRoomChoice = document.querySelector(".cancelRoomChoice")
+        const cancelRoomCreation = document.querySelector(".cancelCreation")
 
+        cancelRoomChoice.onclick = ()=>{
+            document.querySelector(".enterKey").classList.remove("show")
+        }
+
+        cancelRoomCreation.onclick = ()=>{
+            
+            document.querySelector(".popup").classList.remove("show")
+            document.querySelector("#createRoom").disabled = false          
+        }
 
         const palette = document.querySelector(".palette")
         const brushes = document.querySelector(".brushes")

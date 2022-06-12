@@ -91,11 +91,11 @@ canvas{
     color : #f9dce1;
 
 }
-form > *{
+.login form > *{
     display: inline;
     font-size: 1.5em;
 }
-form {
+.login form {
     margin-top: 80px;
     display: flex;
     align-items: center;
@@ -110,7 +110,8 @@ form {
     color : #f9dce1;
     text-align: center;
     border-radius: 4px;
-    background: #308695;
+    background: transparent;
+    border : 1px solid #308695;
     width : 100%;
 }
 .login ::placeholder{

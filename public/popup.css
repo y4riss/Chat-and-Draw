@@ -1,0 +1,72 @@
+.popup,.popupOfKey,.enterKey{
+    width: 100%;
+    height: 100vh;
+    background: #000000c7;
+    position: absolute;
+    top : 0;
+    display: none;
+    justify-content: center;
+    z-index: 99;
+}
+.popupOfKey {
+    align-items: center;
+}
+.popupOfKey p{
+    background: white;
+    padding: 1em;
+    position: relative;
+    cursor: pointer;
+
+}
+.popupOfKey img,.enterKey img , .popup img{
+    position: absolute;
+    top : 0;
+    right: 2%;
+    cursor : pointer;
+}
+.choice , .enterKey form{
+    width: 20%;
+    height: fit-content;
+    margin-top: 5%;
+    display: grid;
+}
+.choice{
+    position: relative;
+}
+.choice img{
+    top : -6px;
+    right: 0;
+    background: white;
+}
+.choice button:hover{
+    background : #2c7480;
+}
+.popup h4{
+    color : white;
+    font-weight: bolder;
+}
+.show{
+    display:flex;
+}
+
+
+.enterKey form{
+    background : #308695;
+    position : relative;
+    color : white;
+    padding: 1em;
+    gap: .5em;
+    border-radius: 4px;
+}
+.enterKey input{
+    padding : 1em;
+    outline : none;
+    border : none;
+    font-size: 1em;
+    background: #151515;
+    border: 1px solid #308695;
+    color: white;
+    padding: 1em;
+    padding-right: 2em;
+    width: 100%;
+}

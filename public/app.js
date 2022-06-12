@@ -8,6 +8,7 @@ const roomInput = document.querySelector("#createRoom");
 const emptyString = /^\s*$/
 
 let username = ""
+let currentRoom = null
 let userList = []
 let rooms = []
 
@@ -37,6 +38,9 @@ const handle_username = e=>{
             alert("username already exists")
         }
         else if(username.match(emptyString)) alert("username must not be empty")
+        else if(username.length > 10){
+            alert("username must be under 10 characters")
+        }
         else{
             socket.emit('joined',username);
             login.classList.add("hide");
@@ -54,14 +58,46 @@ const handle_roomname = e=>{
         alert("room already exists")
     }
     else if(roomname.match(emptyString)) alert("room name must not be empty")
+    else if(roomname.length > 10){
+        alert("room name must be under 10 characters")
+    }
     else{
-        socket.emit("new room",roomname,username)
-        socket.emit("user joins room",username,roomname)
-        connectionAlert(username,"joined")
-        document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAA4f8AAAAAAKjP8ADjkPAABLTMALBwugCQs9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERURERERERERVVERERERERM1URERERERMzMUQRERERETMRREEREREREQAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFGYREREREQACZhERERERECIhERERERERIhHH/wAAg/8AAAH/AAAA/wAAAH8AAIA/AADAHwAA4A8AAPAHAAD4AwAA/AEAAP4AAAD/AAAA/4AAAP/AAAD/4AAA),auto";
-        roomsPage.classList.add("hide");
-        container.classList.remove("hide");
-        document.getElementById("chatInput").placeholder = ` ${username}, type your message here...`;
+        const popup = document.querySelector(".popup")
+        popup.classList.add("show")
+        roomInput.disabled = true
+        document.getElementById("publicBtn").onclick = ()=>{
+            const privacy = {
+                private : false,
+                key : null
+            }
+            socket.emit("new room",roomname,username,privacy)
+            enterRoom(roomname)
+            popup.classList.remove("show")
+        }
+        document.getElementById("privateBtn").onclick = ()=>{
+            let key = shuffle(ascii_to_hex(username+roomname).split("")).join("")
+            while(key.length < 10){
+                key +=  (Math.floor(Math.random() * 9)+"");
+            }
+            const privacy = {
+                private : true,
+                key : key
+            }
+            const popupOfKey = document.querySelector(".popupOfKey")
+            const p = document.createElement("p")
+            const img = document.createElement("img")
+            img.src = "x.svg"
+            p.innerText = `Your key is : ${key} , share it with your friends to join the room`
+            p.appendChild(img)
+            popupOfKey.appendChild(p)
+            popupOfKey.classList.add("show")
+            socket.emit("new room",roomname,username,privacy)
+            enterRoom(roomname)
+            popup.classList.remove("show")
+            img.onclick = ()=>{
+                popupOfKey.classList.remove("show")
+            }
+        }
     }
     roomInput.value = ""
 }
@@ -175,6 +211,32 @@ const connectionAlert = (user,action)=>{
     ul.appendChild(li);
 
 }
+
+const enterRoom = (roomname)=>{
+    socket.emit("user joins room",username,roomname)
+    connectionAlert(username,"joined")
+    document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAA4f8AAAAAAKjP8ADjkPAABLTMALBwugCQs9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERURERERERERVVERERERERM1URERERERMzMUQRERERETMRREEREREREQAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFGYREREREQACZhERERERECIhERERERERIhHH/wAAg/8AAAH/AAAA/wAAAH8AAIA/AADAHwAA4A8AAPAHAAD4AwAA/AEAAP4AAAD/AAAA/4AAAP/AAAD/4AAA),auto";
+    roomsPage.classList.add("hide");
+    container.classList.remove("hide");
+    document.getElementById("chatInput").placeholder = ` ${username}, type your message here...`;
+}
+
+const handleRoomKey = (e)=>{
+    e.preventDefault()
+
+    const inputKey = document.getElementById("inputKey")
+
+    if(inputKey.value.trim() === currentRoom.privacy.key) {
+        const enterKeyPage = document.querySelector(".enterKey")
+        enterKeyPage.classList.remove("show")
+        enterRoom(currentRoom.name)}
+
+    else{
+        alert("invalid key")
+    }
+    inputKey.value = ""
+
+}
 /* ______________________________________________________SOCKETS______________________________________________*/
 
 socket.on("allUsers",users=>{
@@ -217,23 +279,35 @@ socket.on("renderRooms",allRooms=>{
     rooms = allRooms
     const ul = document.querySelector(".available-rooms")
     ul.innerHTML = ""
-    allRooms.map(room =>{
+    if(allRooms.length){
+        allRooms.map(room =>{
 
-        const li = document.createElement("li")
-        const joinButton = document.createElement("button")
-        li.textContent = ` ${room.name}  ( ${room.host} )`
-        joinButton.innerText = "Join room" 
-        li.appendChild(joinButton)
-        ul.appendChild(li)
-        joinButton.addEventListener("click",()=>{
-        socket.emit("user joins room",username,room.name)
-        connectionAlert(username,"joined")
-        document.body.style.cursor = "url(data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAA4f8AAAAAAKjP8ADjkPAABLTMALBwugCQs9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERURERERERERVVERERERERM1URERERERMzMUQRERERETMRREEREREREQAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFEQREREREQABREEREREREAAURBERERERAAFGYREREREQACZhERERERECIhERERERERIhHH/wAAg/8AAAH/AAAA/wAAAH8AAIA/AADAHwAA4A8AAPAHAAD4AwAA/AEAAP4AAAD/AAAA/4AAAP/AAAD/4AAA),auto";
-        roomsPage.classList.add("hide");
-        container.classList.remove("hide");
-        document.getElementById("chatInput").placeholder = ` ${username}, type your message here...`;
+            const li = document.createElement("li")
+            const joinButton = document.createElement("button")
+            li.textContent = ` ${room.name}  ( ${room.host} )`
+            joinButton.innerText = `Join room ( ${room.privacy.private ? 'private' : 'public' })` 
+            li.appendChild(joinButton)
+            ul.appendChild(li)
+            joinButton.addEventListener("click",()=>{
+                if(room.privacy.private === true){
+                    const enterKeyPage = document.querySelector(".enterKey")
+                    console.log(enterKeyPage)
+                    enterKeyPage.classList.add("show")
+                    currentRoom = room
+                }
+                else{
+                    enterRoom(room.name)
+
+                }
+            })
         })
-    })
+    }
+    else{
+        const p = document.createElement("p")
+        p.innerText = "No rooms yet, be the first to create one !"
+        ul.appendChild(p)
+    }
+
 })
 
 socket.on('userIsDrawing',data=>{
@@ -295,3 +369,18 @@ canvas.addEventListener("pointerup",()=>{
     drawing = false
     socket.emit('mouseup')
 })
+
+
+const shuffle = (arr) =>{
+    const newArr = arr
+    newArr.sort(()=> 0.5 - Math.random());
+    return newArr
+}
+const ascii_to_hex = str =>{
+    let arr1 = [];
+	for (let n = 0, l = str.length; n < l; n ++) 
+     {
+		arr1.push(Number(str.charCodeAt(n)).toString(16));
+	 }
+	return arr1.join('');
+}

@@ -47,7 +47,7 @@ io.on('connection',socket=>{
 
 
     //when a user creates a room
-    socket.on("new room",(roomname,username) =>{
+    socket.on("new room",(roomname,username,privacy) =>{
 
         rooms.push({
             host : username,
@@ -56,6 +56,7 @@ io.on('connection',socket=>{
             messages : [],
             lines : [],
             lineCoords : [],
+            privacy :privacy
         })
         io.emit("renderRooms",rooms)
 
@@ -69,7 +70,6 @@ io.on('connection',socket=>{
            
             socket.join(roomname)
             addUserToRoom(username,roomname)
-            
             const joinMsg = {
                 owner : username,
                 msg : "has joined"
